@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AngleSharp">
+      <HintPath>..\..\..\..\..\..\..\AngleSharp-master\src\AngleSharp\bin\Debug\v4.5\AngleSharp.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\..\..\..\Downloads\v4.5\MySql.Data.dll</HintPath>
     </Reference>
@@ -57,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TJpars.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
