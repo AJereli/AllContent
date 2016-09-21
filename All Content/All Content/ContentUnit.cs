@@ -33,7 +33,7 @@ namespace All_Content
         public void LoadContentToSQL()
         {
             ID++;
-            client.Query("INSERT INTO content VALUES(" + ID + "+", " + header +", " +description +", " +imgUrl +", "
+            client.Query("INSERT INTO content VALUES(" + ID + "," + header +"," +description +", " +imgUrl +", "
                 + URL + "," + tags + "," + source + ");");
         }
     }
