@@ -11,6 +11,8 @@ namespace All_Content
 
     class DBClient
     {
+
+
         MySqlConnectionStringBuilder mysqlCSB;
         MySqlConnection mysqlConn;
 
