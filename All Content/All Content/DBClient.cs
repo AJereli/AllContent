@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Data;
-namespace Content_Agregator
+namespace All_Content
 {
 
 
@@ -45,14 +45,14 @@ namespace Content_Agregator
         /// <summary>
         /// Open a connection with DB
         /// </summary>
-        public void OpenConnection()
+        void OpenConnection()
         {
             mysqlConn.Open();
         }
         /// <summary>
         /// Close a connection whith DB
         /// </summary>
-        public void CloseConnection()
+        void CloseConnection()
         {
             mysqlConn.Close();
         }
@@ -60,10 +60,11 @@ namespace Content_Agregator
         /// <summary>
         /// Implement INSERT, UPDATE or DELETE query
         /// </summary>
-        /// <param name="query">Your query</param>
+        /// <param name="query">Your SQL query</param>
 
         public void Query(string query)
         {
+            OpenConnection();
             if (query.Contains("SELECT"))
             {
                 throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
@@ -71,12 +72,18 @@ namespace Content_Agregator
 
             MySqlCommand com = new MySqlCommand(query, mysqlConn);
             MySqlDataReader dataReader = com.ExecuteReader();
+            CloseConnection();
             dataReader.Read();
             dataReader.Close();
         }
-
+        /// <summary>
+        /// Select information from DB
+        /// </summary>
+        /// <param name="query">Your SELECT query</param>
+        /// <returns>list of selected information</returns>
         public List<string> SelectQuery(string query)
         {
+            OpenConnection();
             if (query.Contains("INSERT"))
             {
                 throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
@@ -88,6 +95,7 @@ namespace Content_Agregator
                 result.Add(dataReader.GetString(0));
            
             dataReader.Close();
+            CloseConnection();
             return result;
         }
 
