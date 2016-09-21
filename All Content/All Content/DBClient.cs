@@ -11,6 +11,8 @@ namespace Content_Agregator
 
     class DBClient
     {
+
+
         MySqlConnectionStringBuilder mysqlCSB;
         MySqlConnection mysqlConn;
 
