@@ -23,6 +23,8 @@ namespace All_Content
         public MainWindow()
         {
             InitializeComponent();
+            NplusOne_Space npos = new NplusOne_Space();
+
         }
     }
 }
