@@ -13,7 +13,7 @@ using AngleSharp.Dom.Collections;
 using AngleSharp.Dom.Css;
 using AngleSharp.Css;
 using AngleSharp.Dom.Xml;
-using AngleSharp.Xml;
+using AngleSharp.Xml;   
 using AngleSharp.Parser.Html;
 using System.Xml.Linq;
 
@@ -24,19 +24,26 @@ namespace All_Content
        
         HtmlParser parser = new HtmlParser();
         static string link = "https://tjournal.ru";
-
+        ContentUnit cont;
         static IConfiguration config = Configuration.Default.WithDefaultLoader();
         public TJpars()
         {
-                    
 
+            cont = new ContentUnit();
             IDocument document = BrowsingContext.New(config).OpenAsync(link).Result;
-            foreach(IElement element in  document.QuerySelector("div.l-container > div.b-container")
-                .QuerySelector("main.b-content >  div.b-w-feed > div.hereIsLoadMoreContainer")
-                .QuerySelector("div.b-block > div.b-articles loadMoreHere")
-                .QuerySelectorAll("b-articles__b b-articles__b_t2 b-articles__b_t2_1 b-articles__b_t2_1_1 jk-navigation"))
+            foreach (IElement element in document.Body.QuerySelector("div.l-container > div.b-container")
+                .QuerySelectorAll("main.b-content > div.b-w-feed > div.hereIsLoadMoreContainer > div.b-block > div.b-articles.loadMoreHere > div.b-articles__b.b-articles__b_t2.b-articles__b_t2_1.b-articles__b_t2_1_1.jk-navigation")
+                
+                )
             {
-             
+                //MessageBox.Show(element.QuerySelector("div.b-articles__b__text p").TextContent);
+                cont.header = element.QuerySelector("div.b-articles__b__title").TextContent;
+                cont.description = element.QuerySelector("div.b-articles__b__text p").TextContent;
+                cont.imgUrl = element.QuerySelector("div.b-articles__b__image img").GetAttribute("scr");
+                cont.URL = element.QuerySelector("div.b-articles__b__content div.b-articles__b__image a").GetAttribute("href");
+                cont.tags = "TJ";
+                cont.source = link;
+                cont.LoadContentToSQL();
             }
         
         }

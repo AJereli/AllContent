@@ -22,9 +22,9 @@ namespace All_Content
         {
             MySqlConnectionStringBuilder sqlStrBuilder = new MySqlConnectionStringBuilder();
             sqlStrBuilder.Server = "localhost";
-            sqlStrBuilder.Database = "work_db";
+            sqlStrBuilder.Database = "my_db";
             sqlStrBuilder.UserID = "root";
-            sqlStrBuilder.Password = "Gonnadown";
+            sqlStrBuilder.Password = "12345678";
             client = new DBClient(sqlStrBuilder);
         }
         /// <summary>
