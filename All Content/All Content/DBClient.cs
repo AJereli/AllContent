@@ -21,7 +21,7 @@ namespace All_Content
             mysqlConn = new MySqlConnection();
             mysqlCSB = new MySqlConnectionStringBuilder();
             mysqlCSB.Server = "localhost";
-            mysqlCSB.Database = "my_db";
+            mysqlCSB.Database = "work_db";
             mysqlCSB.UserID = "root";
             mysqlCSB.Password = "Gonnadown";
             mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
@@ -72,9 +72,9 @@ namespace All_Content
 
             MySqlCommand com = new MySqlCommand(query, mysqlConn);
             MySqlDataReader dataReader = com.ExecuteReader();
-            CloseConnection();
             dataReader.Read();
             dataReader.Close();
+            CloseConnection();
         }
         /// <summary>
         /// Select information from DB

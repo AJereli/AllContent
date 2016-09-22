@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace All_Content
 {
     class ContentUnit
@@ -32,9 +31,10 @@ namespace All_Content
         /// </summary>
         public void LoadContentToSQL()
         {
+            ID = Convert.ToInt32(client.SelectQuery("SELECT MAX(id) AS id FROM content")[0]);
             ID++;
-            client.Query("INSERT INTO content VALUES(" + ID + "," + header +"," +description +", " +imgUrl +", "
-                + URL + "," + tags + "," + source + ");");
+            client.Query("INSERT INTO content VALUES('" + ID + "','" + header + "','" + description + "', '" + imgUrl + "', '"
+            + URL + "','" + tags + "','" + source + "');");
         }
     }
 }

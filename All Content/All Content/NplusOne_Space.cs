@@ -13,6 +13,7 @@ namespace All_Content
 {
     class NplusOne_Space
     {
+        const int news_limit = 6;
         HtmlParser parser;
         string link = "https://nplus1.ru/rubric/space";
         IConfiguration config;
@@ -24,18 +25,22 @@ namespace All_Content
             parser = new HtmlParser();
             config = Configuration.Default.WithDefaultLoader();
             document = BrowsingContext.New(config).OpenAsync(link).Result;
-            var a = document.All.Where(m => m.Id == "main").First();
-            MessageBox.Show(a.OuterHtml);
-            //foreach (IElement element in document.Body.QuerySelectorAll(
-            //    )
-            //{
-            //    cu.header = element.QuerySelector("div.col-sm-16 a h2.flow-post__title").TextContent;
-            //    cu.description = element.QuerySelector("div.col-sm-16 p.flow-post__excerpt").TextContent;
-            //    cu.URL = element.QuerySelector("div.col-sm-16 a").GetAttribute("href");
-            //    cu.imgUrl = "";
-            //    cu.source = link;
-            //    cu.tags = "since;space;";
-            //}
+            var all_news = document.All.Where(m => m.Id == "main").First().QuerySelectorAll("div.caption");
+
+            int count = 0;
+            foreach (IElement element in all_news)
+            {
+                cu.header = element.QuerySelector("h3").TextContent;
+                cu.description = element.QuerySelector("h3").TextContent;
+                cu.URL = link + element.ParentElement.GetAttribute("href");
+                cu.imgUrl = "";
+                cu.source = link;
+                cu.tags = "since;space;";
+                cu.LoadContentToSQL();
+                count++;
+                if (count == news_limit)
+                    break;
+            }
         }
 
 
