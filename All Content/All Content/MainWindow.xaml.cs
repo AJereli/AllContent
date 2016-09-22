@@ -22,6 +22,8 @@ namespace All_Content
     {
         public MainWindow()
         {
+            TJpars a;
+            
             InitializeComponent();
             NplusOne_Space npos = new NplusOne_Space();
 
