@@ -39,7 +39,7 @@ namespace All_Content
                 //MessageBox.Show(element.QuerySelector("div.b-articles__b__text p").TextContent);
                 cont.header = element.QuerySelector("div.b-articles__b__title").TextContent;
                 cont.description = element.QuerySelector("div.b-articles__b__text p").TextContent;
-                cont.imgUrl = element.QuerySelector("div.b-articles__b__image img").GetAttribute("scr");
+                cont.imgUrl = element.QuerySelector("div.b-articles__b__image img").GetAttribute("src");
                 cont.URL = element.QuerySelector("div.b-articles__b__content div.b-articles__b__image a").GetAttribute("href");
                 cont.tags = "TJ";
                 cont.source = link;

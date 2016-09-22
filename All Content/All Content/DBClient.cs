@@ -21,9 +21,9 @@ namespace All_Content
             mysqlConn = new MySqlConnection();
             mysqlCSB = new MySqlConnectionStringBuilder();
             mysqlCSB.Server = "localhost";
-            mysqlCSB.Database = "work_db";
+            mysqlCSB.Database = "my_db";
             mysqlCSB.UserID = "root";
-            mysqlCSB.Password = "Gonnadown";
+            mysqlCSB.Password = "12345678";
             mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
 
         }
