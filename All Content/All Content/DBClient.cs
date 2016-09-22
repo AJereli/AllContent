@@ -93,7 +93,7 @@ namespace All_Content
             MySqlDataReader dataReader = command.ExecuteReader();
             while (dataReader.Read())
                 result.Add(dataReader.GetString(0));
-           
+
             dataReader.Close();
             CloseConnection();
             return result;
