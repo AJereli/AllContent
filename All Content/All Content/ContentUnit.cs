@@ -1,5 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using System; //Test2
+using System; //екеар
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
