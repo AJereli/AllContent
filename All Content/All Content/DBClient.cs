@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 namespace All_Content
 {
-    //commit
+    
 
     class DBClient
     {
