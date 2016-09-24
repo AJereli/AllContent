@@ -61,6 +61,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ContentUnit.cs" />
+    <Compile Include="IPageParsed.cs" />
+    <Compile Include="TheVillagePars.cs" />
     <Compile Include="TJpars.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

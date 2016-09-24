@@ -21,12 +21,10 @@ namespace All_Content
     public partial class MainWindow : Window
     {
         public MainWindow()
-        {
-            TJpars a;
-            
+        {            
             InitializeComponent();
-            NplusOne_Space npos = new NplusOne_Space();
-
+            TheVillagePars tvp = new TheVillagePars();
+            NplusOne_Space v = new NplusOne_Space();
         }
     }
 }

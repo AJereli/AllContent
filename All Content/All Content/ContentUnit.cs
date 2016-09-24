@@ -18,13 +18,8 @@ namespace All_Content
         public string source { get; set; }
 
         public ContentUnit()
-        {
-            MySqlConnectionStringBuilder sqlStrBuilder = new MySqlConnectionStringBuilder();
-            sqlStrBuilder.Server = "localhost";
-            sqlStrBuilder.Database = "work_db";
-            sqlStrBuilder.UserID = "root";
-            sqlStrBuilder.Password = "Gonnadown";
-            client = new DBClient(sqlStrBuilder);
+        {           
+            client = new DBClient();
         }
         /// <summary>
         /// 
