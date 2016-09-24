@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AngleSharp">
-      <HintPath>..\..\..\..\..\..\..\AngleSharp-master\src\AngleSharp\bin\Debug\v4.5\AngleSharp.dll</HintPath>
+      <HintPath>D:\Programming\Applications\Content_Agregator\AngleSharp-master\src\packages\AngleSharp.0.9.6\lib\dotnet\AngleSharp.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\..\..\..\Downloads\v4.5\MySql.Data.dll</HintPath>
@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="ContentUnit.cs" />
     <Compile Include="IPageParsed.cs" />
+    <Compile Include="LifehackerTopParse.cs" />
     <Compile Include="TheVillagePars.cs" />
     <Compile Include="TJpars.cs" />
     <Page Include="MainWindow.xaml">
