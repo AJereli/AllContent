@@ -63,6 +63,7 @@
     <Compile Include="ContentUnit.cs" />
     <Compile Include="IPageParsed.cs" />
     <Compile Include="Kanobu.cs" />
+    <Compile Include="LentaRu.cs" />
     <Compile Include="SiteForPars.cs" />
     <Compile Include="TheVillagePars.cs" />
     <Compile Include="TJpars.cs" />

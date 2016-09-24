@@ -23,8 +23,10 @@ namespace All_Content
         public MainWindow()
         {            
             InitializeComponent();
-            TheVillagePars tvp = new TheVillagePars();
-            NplusOne_Space v = new NplusOne_Space();
+            //TheVillagePars tvp = new TheVillagePars();
+            //NplusOne_Space v = new NplusOne_Space();
+            //Kanobu k = new Kanobu();
+            //LentaRu l = new LentaRu();
         }
     }
 }

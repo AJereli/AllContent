@@ -24,6 +24,7 @@ namespace All_Content
             parser = new HtmlParser();
             config = Configuration.Default.WithDefaultLoader();
             document = BrowsingContext.New(config).OpenAsync(link).Result;
+            cu.source = link;
         }
     }
 }
