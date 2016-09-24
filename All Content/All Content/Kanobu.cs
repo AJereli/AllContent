@@ -13,8 +13,10 @@ namespace All_Content
     {
        
 
-        public Kanobu()
+        public Kanobu() : base ("http://kanobu.ru/")
         {
+
+            var all_news = document.All.Where(m => m.Id == "mainpage-news").First().QuerySelectorAll("div.caption");
 
         }
     }

@@ -11,17 +11,14 @@ using System.Windows;
 
 namespace All_Content 
 {
-    class NplusOne_Space : SiteForPars
+    class NplusOne_Space : SiteForPars 
     {
         const int news_limit = 6;
       
-        public NplusOne_Space()
+        public NplusOne_Space() : base ("https://nplus1.ru/rubric/space")
         {
-            link = "https://nplus1.ru/rubric/space";
-            cu = new ContentUnit();
-            parser = new HtmlParser();
-            config = Configuration.Default.WithDefaultLoader();
-            document = BrowsingContext.New(config).OpenAsync(link).Result;
+            
+          
             var all_news = document.All.Where(m => m.Id == "main").First().QuerySelectorAll("div.caption");
 
             int count = 0;

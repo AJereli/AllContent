@@ -16,6 +16,14 @@ namespace All_Content
         protected IConfiguration config { get; set; }
         protected IDocument document { get; set; }
         protected ContentUnit cu { get; set; }
-
+        
+        protected SiteForPars(string _link)
+        {
+            link = _link;
+            cu = new ContentUnit();
+            parser = new HtmlParser();
+            config = Configuration.Default.WithDefaultLoader();
+            document = BrowsingContext.New(config).OpenAsync(link).Result;
+        }
     }
 }
