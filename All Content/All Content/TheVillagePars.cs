@@ -10,13 +10,9 @@ using System.Windows;
 
 namespace All_Content
 {
-    class TheVillagePars
+    class TheVillagePars : SiteForPars
     {
-        HtmlParser parser { get; set; }
-        string link { get; set; }
-        IConfiguration config { get; set; }
-        IDocument document { get; set; }
-        ContentUnit cu { get; set; }
+        
 
         public TheVillagePars()
         {

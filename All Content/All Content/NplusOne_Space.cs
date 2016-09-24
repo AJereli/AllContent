@@ -9,18 +9,15 @@ using AngleSharp.Dom;
 using System.Windows;
 
 
-namespace All_Content
+namespace All_Content 
 {
-    class NplusOne_Space
+    class NplusOne_Space : SiteForPars
     {
         const int news_limit = 6;
-        HtmlParser parser;
-        string link = "https://nplus1.ru/rubric/space";
-        IConfiguration config;
-        IDocument document;
-        ContentUnit cu;
+      
         public NplusOne_Space()
         {
+            link = "https://nplus1.ru/rubric/space";
             cu = new ContentUnit();
             parser = new HtmlParser();
             config = Configuration.Default.WithDefaultLoader();
