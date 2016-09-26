@@ -21,10 +21,10 @@ namespace All_Content
     public partial class MainWindow : Window
     {
         public MainWindow()
-        {
-
-
+        {            
             InitializeComponent();
+            TheVillagePars tvp = new TheVillagePars();
+            NplusOne_Space v = new NplusOne_Space();
             TJpars sks = new TJpars(); 
 
         }

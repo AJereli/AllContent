@@ -20,10 +20,11 @@ namespace All_Content
         {
             mysqlConn = new MySqlConnection();
             mysqlCSB = new MySqlConnectionStringBuilder();
-            mysqlCSB.Server = "localhost";
-            mysqlCSB.Database = "my_db";
+            mysqlCSB.Server = "194.87.239.28";
+            mysqlCSB.Port = 3306;
+            mysqlCSB.Database = "content";
             mysqlCSB.UserID = "root";
-            mysqlCSB.Password = "12345678";
+            mysqlCSB.Password = "TooEasyWork";
             mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
 
         }
