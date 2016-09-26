@@ -10,22 +10,15 @@ using System.Windows;
 
 namespace All_Content
 {
-    class TheVillagePars
+    class TheVillagePars : SiteForPars
     {
-        HtmlParser parser { get; set; }
-        string link { get; set; }
-        IConfiguration config { get; set; }
-        IDocument document { get; set; }
-        ContentUnit cu { get; set; }
+        
 
-        public TheVillagePars()
+        public TheVillagePars() : base ("http://www.the-village.ru/")
         {
-            link = "http://www.the-village.ru/";
+            
 
-            cu = new ContentUnit();
-            parser = new HtmlParser();
-            config = Configuration.Default.WithDefaultLoader();
-            document = BrowsingContext.New(config).OpenAsync(link).Result;
+         
             var all_news = document.All.Where(m => m.Id == "widget_news_block").First().QuerySelectorAll("div.post-item.post-item-news a");
 
             foreach (IElement element in all_news)

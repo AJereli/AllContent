@@ -21,7 +21,7 @@ namespace All_Content
 {
     class TJpars
     {
-       
+
         HtmlParser parser = new HtmlParser();
         static string link = "https://tjournal.ru";
         ContentUnit cont;
@@ -33,7 +33,7 @@ namespace All_Content
             IDocument document = BrowsingContext.New(config).OpenAsync(link).Result;
             foreach (IElement element in document.Body.QuerySelector("div.l-container > div.b-container")
                 .QuerySelectorAll("main.b-content > div.b-w-feed > div.hereIsLoadMoreContainer > div.b-block > div.b-articles.loadMoreHere > div.b-articles__b.b-articles__b_t2.b-articles__b_t2_1.b-articles__b_t2_1_1.jk-navigation")
-                
+
                 )
             {
                 //MessageBox.Show(element.QuerySelector("div.b-articles__b__text p").TextContent);
@@ -45,8 +45,8 @@ namespace All_Content
                 cont.source = link;
                 cont.LoadContentToSQL();
             }
-        
+
         }
-       
+
     }
 }

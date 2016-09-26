@@ -16,10 +16,11 @@ namespace All_Content
         public string URL { get; set; }
         public string tags { get; set; }
         public string source { get; set; }
-
+        public string date { get; set; }
         public ContentUnit()
         {           
             client = new DBClient();
+            date = header = imgUrl = description = URL = tags = source = "";
         }
         /// <summary>
         /// 
@@ -29,7 +30,7 @@ namespace All_Content
             ID = Convert.ToInt32(client.SelectQuery("SELECT MAX(id) AS id FROM content")[0]);
             ID++;
             client.Query("INSERT INTO content VALUES('" + ID + "','" + header + "','" + description + "', '" + imgUrl + "', '"
-            + URL + "','" + tags + "','" + source + "');");
+            + URL + "','" + tags + "','" + source + "', '" + date + "');");
         }
     }
 }
