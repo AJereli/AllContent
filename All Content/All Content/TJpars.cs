@@ -1,21 +1,6 @@
-﻿using System;
-using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Dom.Html;
-using AngleSharp;
-using System.IO;
-using AngleSharp.Html;
-using AngleSharp.Dom.Collections;
-using AngleSharp.Dom.Css;
-using AngleSharp.Css;
-using AngleSharp.Dom.Xml;
-using AngleSharp.Xml;   
+﻿using AngleSharp.Dom;
+using AngleSharp;   
 using AngleSharp.Parser.Html;
-using System.Xml.Linq;
 
 namespace All_Content
 {
@@ -36,7 +21,6 @@ namespace All_Content
 
                 )
             {
-                //MessageBox.Show(element.QuerySelector("div.b-articles__b__text p").TextContent);
                 cont.header = element.QuerySelector("div.b-articles__b__title").TextContent;
                 cont.description = element.QuerySelector("div.b-articles__b__text p").TextContent;
                 cont.imgUrl = element.QuerySelector("div.b-articles__b__image img").GetAttribute("src");

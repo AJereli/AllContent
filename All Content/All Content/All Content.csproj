@@ -73,6 +73,8 @@
     <Compile Include="LifehackerSport.cs" />
     <Compile Include="LifehackerTechnology.cs" />
     <Compile Include="LifehackerWork.cs" />
+    <Compile Include="RoemInvesticii.cs" />
+    <Compile Include="RoemMedia.cs" />
     <Compile Include="SiteForPars.cs" />
     <Compile Include="TheVillagePars.cs" />
     <Compile Include="TJpars.cs" />

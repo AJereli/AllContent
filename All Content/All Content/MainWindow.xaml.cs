@@ -27,6 +27,9 @@ namespace All_Content
             //NplusOne_Space v = new NplusOne_Space();
             //Kanobu k = new Kanobu();
             //LentaRu l = new LentaRu();
+            //TJpars tmp = new TJpars();
+         //   RoemMedia tmp1 = new RoemMedia();
+           // RoemInvesticii ri = new RoemInvesticii();
         }
     }
 }
