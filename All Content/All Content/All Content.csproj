@@ -65,6 +65,7 @@
     <Compile Include="Kanobu.cs" />
     <Compile Include="LentaRu.cs" />
     <Compile Include="LifeHacker.cs" />
+    <Compile Include="RiaNews.cs" />
     <Compile Include="RoemInvesticii.cs" />
     <Compile Include="RoemMedia.cs" />
     <Compile Include="SiteForPars.cs" />

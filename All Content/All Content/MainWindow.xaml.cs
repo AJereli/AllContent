@@ -97,6 +97,7 @@ namespace All_Content
             all_sites.Add(new RoemInvesticii());
             all_sites.Add(new RoemMedia());
             all_sites.Add(new LifeHacker());
+            all_sites.Add(new RiaNews());
         }
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
