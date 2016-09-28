@@ -18,7 +18,12 @@ namespace All_Content
         public NplusOne_Space() : base ("https://nplus1.ru/rubric/space")
         {
             
-          
+            
+        }
+
+        public override void Pars()
+        {
+            IDocument document = BrowsingContext.New(config).OpenAsync(link).Result;
             var all_news = document.All.Where(m => m.Id == "main").First().QuerySelectorAll("div.caption");
 
             int count = 0;
@@ -36,7 +41,5 @@ namespace All_Content
                     break;
             }
         }
-
-
     }
 }

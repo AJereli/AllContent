@@ -26,5 +26,11 @@ namespace All_Content
             document = BrowsingContext.New(config).OpenAsync(link).Result;
             cu.source = link;
         }
+        protected void LoadDocument()
+        {
+            document.Dispose();
+            document = BrowsingContext.New(config).OpenAsync(link).Result;
+        }
+        public virtual void Pars() { }
     }
 }

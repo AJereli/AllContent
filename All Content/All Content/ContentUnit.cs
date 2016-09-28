@@ -1,9 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 namespace All_Content
 {
     class ContentUnit
@@ -17,6 +14,8 @@ namespace All_Content
         public string tags { get; set; }
         public string source { get; set; }
         public string date { get; set; }
+
+        public DateTime time_of_addition { get; private set; }
         public ContentUnit()
         {           
             client = new DBClient();
@@ -25,12 +24,30 @@ namespace All_Content
         /// <summary>
         /// 
         /// </summary>
-        public void LoadContentToSQL()
+        public bool LoadContentToSQL()
         {
-            ID = Convert.ToInt32(client.SelectQuery("SELECT MAX(id) AS id FROM content")[0]);
-            ID++;
-            client.Query("INSERT INTO content VALUES('" + ID + "','" + header + "','" + description + "', '" + imgUrl + "', '"
-            + URL + "','" + tags + "','" + source + "', '" + date + "');");
+            if (ContainsNote())
+                return false;
+            time_of_addition = DateTime.Now;
+            
+            
+            //client.Query("INSERT INTO content (header, description, imgUrl, URL, tags, source, date, time_of_addition) VALUES('" + @header + "','" 
+            //    + @description + "', '" + @imgUrl + "', '"
+            //+ URL + "','" + @tags + "','" + source + "', '" + date + "','" + time_of_addition.ToShortDateString()+ "');");
+            client.Query("INSERT INTO content (header, description, imgUrl, URL, tags, source, date, time_of_addition)"
+                + "VALUES(@header, @description, @imgUrl, @URL, @tags, @source, @date, @time_of_addition)", this);
+
+           
+            return true;
+        }
+
+
+        bool ContainsNote ()
+        {
+            if (client.SelectQuery("SELECT id FROM content WHERE URL = '" + URL + "';").Count > 0)
+                return true;
+            else return false;
+
         }
     }
 }

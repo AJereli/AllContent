@@ -64,15 +64,7 @@
     <Compile Include="IPageParsed.cs" />
     <Compile Include="Kanobu.cs" />
     <Compile Include="LentaRu.cs" />
-    <Compile Include="LifehackerAllTop.cs" />
-    <Compile Include="LifehackerHealth.cs" />
-    <Compile Include="LifehackerInfographics.cs" />
-    <Compile Include="LifehackerLife.cs" />
-    <Compile Include="LifehackerRelax.cs" />
-    <Compile Include="LifehackerReview.cs" />
-    <Compile Include="LifehackerSport.cs" />
-    <Compile Include="LifehackerTechnology.cs" />
-    <Compile Include="LifehackerWork.cs" />
+    <Compile Include="LifeHacker.cs" />
     <Compile Include="RoemInvesticii.cs" />
     <Compile Include="RoemMedia.cs" />
     <Compile Include="SiteForPars.cs" />
