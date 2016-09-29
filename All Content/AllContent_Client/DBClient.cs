@@ -65,36 +65,7 @@ namespace AllContent_Client
                 dataReader.Close();
             }
         }
-        public void Query(string query, ContentUnit cu)
-        {
-           
-                using (var mysqlConn = new MySqlConnection())
-                {
-                    if (query.Contains("SELECT"))
-                    {
-                        throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
-                    }
-
-                    mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
-                    mysqlConn.Open();
-                    MySqlCommand com = new MySqlCommand(@query, mysqlConn);
-
-                    com.Parameters.AddWithValue("@header", cu.header);
-                    com.Parameters.AddWithValue("@description", cu.description);
-                    com.Parameters.AddWithValue("@imgUrl", cu.imgUrl);
-                    com.Parameters.AddWithValue("@URL", cu.URL);
-                    com.Parameters.AddWithValue("@tags", cu.tags);
-                    com.Parameters.AddWithValue("@source", cu.source);
-                    com.Parameters.AddWithValue("@date", cu.date);
-                    com.Parameters.AddWithValue("@time_of_addition", cu.time_of_addition.ToShortDateString());
-                lock (threadLock)
-                {
-                    MySqlDataReader dataReader = com.ExecuteReader();
-                    dataReader.Read();
-                    dataReader.Close();
-                }
-            }
-        }
+      
         /// <summary>
         /// Select information from DB
         /// </summary>

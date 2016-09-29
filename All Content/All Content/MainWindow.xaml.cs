@@ -49,7 +49,7 @@ namespace All_Content
         private async void Refresh_timer_Tick(object sender, EventArgs e)
         {
             status.Background = Brushes.ForestGreen;
-            status.Content = "Parsing status: wait timer";
+            status.Content = "Parsing status: active";
             time_of_last_pars.Content = "Последний парсинг начат в: " + DateTime.Now.ToShortTimeString();
             foreach (var site in all_sites)
                 await Task.Run(() =>

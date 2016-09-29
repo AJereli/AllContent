@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Dom;
-using System.Collections.Generic;
 using System.Windows.Threading;
 using System.Windows;
 
