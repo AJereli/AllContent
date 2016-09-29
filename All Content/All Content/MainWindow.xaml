@@ -7,16 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="550" Width="725">
     <Grid>
-        <Button x:Name="button_delete_all" Content="Delete all" HorizontalAlignment="Left" Margin="10,111,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="button_delete_all" Content="Delete all" HorizontalAlignment="Left" Margin="0,151,0,0" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="status" Content="Parsing status: does not work" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="30" Width="181" Background="#FFFF7373" FontWeight="Bold"/>
-        <PasswordBox x:Name="passw" Margin="90,100,542,387"/>
+        <PasswordBox x:Name="passw" Margin="90,149,542,338"/>
         <Button x:Name="button_on" Content="On" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="75"/>
         <Button x:Name="button_off" Content="Off" HorizontalAlignment="Left" Margin="116,45,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="button_interval" Content="Okay" HorizontalAlignment="Left" Margin="10,218,0,0" VerticalAlignment="Top" Width="75" Click="button_interval_Click"/>
-        <Label x:Name="interv" Content="Set interval of parsing (in min)" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.385" Width="181"/>
-        <TextBox x:Name="input_interval" HorizontalAlignment="Left" Height="23" Margin="90,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" UndoLimit="5" KeyDown="textBox_KeyDown"/>
+        <Button x:Name="button_interval" Content="Okay" HorizontalAlignment="Left" Margin="10,254,0,0" VerticalAlignment="Top" Width="75" Click="button_interval_Click"/>
+        <Label x:Name="interv" Content="Set interval of parsing (in min)" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.385" Width="181"/>
+        <TextBox x:Name="input_interval" HorizontalAlignment="Left" Height="23" Margin="90,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" UndoLimit="5" KeyDown="textBox_KeyDown"/>
         <Label x:Name="lable_info" Content="" HorizontalAlignment="Left" Margin="268,10,0,0" VerticalAlignment="Top" Width="335"/>
-        <Label x:Name="time_of_last_pars" Content="Парсинг небыл запущен" HorizontalAlignment="Left" Margin="10,415,0,0" VerticalAlignment="Top" Height="39" Width="206"/>
-        <Label x:Name="cur_inter_time" Content="Curr time: 6 min" HorizontalAlignment="Left" Margin="10,245,0,0" VerticalAlignment="Top" Width="140"/>
+        <Label x:Name="time_of_last_pars" Content="Парсинг небыл запущен" HorizontalAlignment="Left" Margin="10,82,0,0" VerticalAlignment="Top" Height="39" Width="228"/>
+        <Label x:Name="cur_inter_time" Content="Curr time: 6 min" HorizontalAlignment="Left" Margin="10,281,0,0" VerticalAlignment="Top" Width="140"/>
+        <TextBlock x:Name="all_info_block" HorizontalAlignment="Left" Margin="257,111,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="346" Height="399"/>
     </Grid>
 </Window>

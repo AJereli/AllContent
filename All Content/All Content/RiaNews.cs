@@ -5,7 +5,7 @@ namespace All_Content
 {
     class RiaNews : SiteForPars
     {
-        public RiaNews() : base("https://ria.ru/lenta/")
+        public RiaNews() : base("https://ria.ru/lenta")
         {
 
         }
@@ -16,7 +16,7 @@ namespace All_Content
             foreach (IElement element in document.QuerySelector("div.b-list")
                  .QuerySelectorAll("div.b-list__item"))
             {
-                cu.URL = element.QuerySelector("div.b-list__item a").GetAttribute("href");
+                cu.URL = link + element.QuerySelector("div.b-list__item a").GetAttribute("href");
                 cu.header = element.QuerySelector("div.b-list__item span.b-list__item-title").TextContent;
                 cu.source = link;
                 cu.description = element.QuerySelector("div.b-list__item-announce span").TextContent;

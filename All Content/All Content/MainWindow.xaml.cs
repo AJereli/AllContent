@@ -53,7 +53,15 @@ namespace All_Content
             foreach (var site in all_sites)
                 await Task.Run(() =>
             {
-                site.Pars();
+                try
+                {
+                    site.Pars();
+                }catch (Exception exc)
+                {
+                    string name = site.GetType().FullName;
+                    all_info_block.Text += "Исключение при парсинге " + name + " " + DateTime.Now.ToShortTimeString() + "\n";
+                    all_info_block.Text += exc.GetType().FullName + " " + exc.Message;
+                }
             });
             
         }
@@ -105,9 +113,6 @@ namespace All_Content
 
             if (e.Key == Key.Enter)
                 button_interval_Click(sender, e);
-
-
-
 
         }
 

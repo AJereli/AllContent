@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AngleSharp">
-      <HintPath>..\..\..\..\..\..\..\AngleSharp-master\src\AngleSharp\bin\Debug\v4.5\AngleSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\Desktop\AngleSharp-master\src\AngleSharp\bin\Release\v4.5\AngleSharp.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\..\..\..\Downloads\v4.5\MySql.Data.dll</HintPath>
