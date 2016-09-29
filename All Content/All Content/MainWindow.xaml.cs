@@ -25,6 +25,7 @@ namespace All_Content
         List<SiteForPars> all_sites;
         public MainWindow()
         {
+           
             InitializeComponent();
             all_sites = new List<SiteForPars>();
             InitializationSites();
@@ -34,7 +35,7 @@ namespace All_Content
 
             refresh_timer = new DispatcherTimer();
             refresh_timer.Tick += Refresh_timer_Tick;
-            refresh_timer.Interval = new TimeSpan(0, 6, 1);
+            refresh_timer.Interval = new TimeSpan(0, 0, 5);
 
             button_off.Click += Button_off_Click;
             button_on.Click += Button_on_Click;
@@ -97,9 +98,10 @@ namespace All_Content
 
         private void InitializationSites()
         {
+           all_sites.Add(new NplusOne());
+            all_sites.Add(new KinoPoisk());
             all_sites.Add(new Kanobu());
             all_sites.Add(new LentaRu());
-            all_sites.Add(new NplusOne_Space());
             all_sites.Add(new TheVillagePars());
             all_sites.Add(new TJpars());
             all_sites.Add(new RoemInvesticii());
@@ -115,7 +117,6 @@ namespace All_Content
                 button_interval_Click(sender, e);
 
         }
-
         private void button_interval_Click(object sender, RoutedEventArgs e)
         {
             try

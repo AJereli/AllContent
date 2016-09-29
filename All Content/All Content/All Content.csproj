@@ -63,8 +63,10 @@
     <Compile Include="ContentUnit.cs" />
     <Compile Include="IPageParsed.cs" />
     <Compile Include="Kanobu.cs" />
+    <Compile Include="KinoPoisk.cs" />
     <Compile Include="LentaRu.cs" />
     <Compile Include="LifeHacker.cs" />
+    <Compile Include="NplusOne.cs" />
     <Compile Include="RiaNews.cs" />
     <Compile Include="RoemInvesticii.cs" />
     <Compile Include="RoemMedia.cs" />
@@ -87,7 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MD5Hashing.cs" />
-    <Compile Include="NplusOne_Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
