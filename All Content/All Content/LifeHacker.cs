@@ -70,8 +70,11 @@ namespace All_Content
                 cu.imgUrl = element.QuerySelector("img.flow-post__image").GetAttribute("src");
                 cu.tags = "Лайфхакер, Здоровье";
                 cu.LoadContentToSQL();
+               
             }
+          
         }
+
     }
 
     class LifehackerInfogrophics : SiteForPars
@@ -93,6 +96,7 @@ namespace All_Content
                 cu.imgUrl = element.QuerySelector("img.flow-post__image").GetAttribute("src");
                 cu.tags = "Лайфхакер, Инфографики";
                 cu.LoadContentToSQL();
+                
             }
         }
     }

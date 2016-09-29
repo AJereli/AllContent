@@ -1,7 +1,5 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp;
-using AngleSharp.Parser.Html;
-
 namespace All_Content
 {
     class TJpars : SiteForPars
@@ -34,6 +32,7 @@ namespace All_Content
                 cu.tags = "TJ";
                 cu.source = link;
                 cu.LoadContentToSQL();
+          
             }
         }
 
