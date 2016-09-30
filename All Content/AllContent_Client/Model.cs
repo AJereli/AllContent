@@ -8,5 +8,7 @@ namespace AllContent_Client
 {
     class Model
     {
+        User user;
+
     }
 }

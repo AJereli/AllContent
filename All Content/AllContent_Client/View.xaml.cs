@@ -20,6 +20,7 @@ namespace AllContent_Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        Model model;
         public MainWindow()
         {
             InitializeComponent();

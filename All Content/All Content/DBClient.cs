@@ -14,6 +14,8 @@ namespace All_Content
         MySqlConnectionStringBuilder mysqlCSB;
         MySqlConnection mysqlConn;
         private object threadLock = new object();
+        private object threadLockSelect = new object();
+
         public DBClient()
         {
             mysqlConn = new MySqlConnection();
@@ -67,14 +69,15 @@ namespace All_Content
         }
         public void Query(string query, ContentUnit cu)
         {
-           
-                using (var mysqlConn = new MySqlConnection())
-                {
-                    if (query.Contains("SELECT"))
-                    {
-                        throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
-                    }
 
+            using (var mysqlConn = new MySqlConnection())
+            {
+                if (query.Contains("SELECT"))
+                {
+                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
+                }
+                lock (threadLock)
+                {
                     mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
                     mysqlConn.Open();
                     MySqlCommand com = new MySqlCommand(@query, mysqlConn);
@@ -87,8 +90,7 @@ namespace All_Content
                     com.Parameters.AddWithValue("@source", cu.source);
                     com.Parameters.AddWithValue("@date", cu.date);
                     com.Parameters.AddWithValue("@time_of_addition", cu.time_of_addition.ToShortDateString());
-                lock (threadLock)
-                {
+                    
                     MySqlDataReader dataReader = com.ExecuteReader();
                     dataReader.Read();
                     dataReader.Close();
@@ -104,23 +106,26 @@ namespace All_Content
         {
             using (var mysqlConn = new MySqlConnection())
             {
-                mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
-                mysqlConn.Open();
-                if (query.Contains("INSERT INTO"))
+                lock (threadLockSelect)
                 {
-                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
+                    mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+                    mysqlConn.Open();
+                    if (query.Contains("INSERT INTO"))
+                    {
+                        throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
+                    }
+                    List<string> result = new List<string>();
+
+                    MySqlCommand command = new MySqlCommand(@query, mysqlConn);
+                    MySqlDataReader dataReader = command.ExecuteReader();
+                    while (dataReader.Read())
+                        result.Add(dataReader.GetString(0));
+
+                    dataReader.Close();
+
+
+                    return result;
                 }
-                List<string> result = new List<string>();
-
-                MySqlCommand command = new MySqlCommand(@query, mysqlConn);
-                MySqlDataReader dataReader = command.ExecuteReader();
-                while (dataReader.Read())
-                    result.Add(dataReader.GetString(0));
-
-                dataReader.Close();
-
-
-                return result;
             }
 
         }

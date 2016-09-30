@@ -35,7 +35,7 @@ namespace All_Content
 
             refresh_timer = new DispatcherTimer();
             refresh_timer.Tick += Refresh_timer_Tick;
-            refresh_timer.Interval = new TimeSpan(0, 0, 5);
+            refresh_timer.Interval = new TimeSpan(0, 2, 5);
 
             button_off.Click += Button_off_Click;
             button_on.Click += Button_on_Click;

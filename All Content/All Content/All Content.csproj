@@ -61,7 +61,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ContentUnit.cs" />
-    <Compile Include="IPageParsed.cs" />
     <Compile Include="Kanobu.cs" />
     <Compile Include="KinoPoisk.cs" />
     <Compile Include="LentaRu.cs" />

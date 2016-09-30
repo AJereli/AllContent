@@ -8,11 +8,12 @@ namespace AllContent_Client
 {
     class MD5Hashing
     {
-        static MD5 md5_hash;
+        private static MD5 md5_hash;
 
-        public MD5Hashing()
+       private MD5Hashing()
         {
-            md5_hash = MD5.Create();
+            if (md5_hash == null)
+                md5_hash = MD5.Create();
         }
         /// <summary>
         /// Determinate MD5 hash from input string
@@ -31,12 +32,13 @@ namespace AllContent_Client
         /// <summary>
         /// It compares two hash
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="hash"></param>
+        /// <param name="input">Non hashed string</param>
+        /// <param name="hash">Hashed string</param>
         /// <param name="isInputHashed">Set true if input - hased string</param>
         /// <returns></returns>
         static public bool CompareHashes (string input, string hash, bool isInputHashed = false)
         {
+            
             if (isInputHashed)
                 return GetMd5Hash(input) == hash;
             else
