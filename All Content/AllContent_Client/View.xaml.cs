@@ -24,6 +24,16 @@ namespace AllContent_Client
         public MainWindow()
         {
             InitializeComponent();
+
+            User user = new User();
+            if (user.Authorization("MyLogin", "MyPassword"))
+            {
+                user.AddFavoritSource("a");
+                user.AddFavoritSource("http://www.w3schools.com/sql/sql_update.asp");
+
+
+
+            }
         }
     }
 }

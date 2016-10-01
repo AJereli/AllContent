@@ -12,8 +12,7 @@ namespace AllContent_Client
 
        private MD5Hashing()
         {
-            if (md5_hash == null)
-                md5_hash = MD5.Create();
+            
         }
         /// <summary>
         /// Determinate MD5 hash from input string
@@ -22,6 +21,8 @@ namespace AllContent_Client
         /// <returns>Returns a hash of your string</returns>
         static public string GetMd5Hash(string input)
         {
+            if (md5_hash == null)
+                md5_hash = MD5.Create();
             byte[] data = md5_hash.ComputeHash(Encoding.UTF8.GetBytes(input));
             string ans = "";
             for (int i = 0; i < data.Length; i++)
@@ -38,8 +39,9 @@ namespace AllContent_Client
         /// <returns></returns>
         static public bool CompareHashes (string input, string hash, bool isInputHashed = false)
         {
-            
-            if (isInputHashed)
+            if (md5_hash == null)
+                md5_hash = MD5.Create();
+            if (!isInputHashed)
                 return GetMd5Hash(input) == hash;
             else
                 return input == hash;

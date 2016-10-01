@@ -58,10 +58,8 @@ namespace AllContent_Client
 
 
                     foreach (var param in parameters)
-                    {
-                        MessageBox.Show("foreach para");
                         com.Parameters.Add(param);
-                    }
+
 
                     MySqlDataReader dataReader = com.ExecuteReader();
                     dataReader.Read();
@@ -69,7 +67,17 @@ namespace AllContent_Client
                 }
             }
         }
-
+        /// <summary>
+        /// Same, but only one parameter
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="parameter"></param>
+        public void Query(string query, MySqlParameter parameter)
+        {
+            MySqlParameters parameters = new MySqlParameters();
+            parameters.AddParameter(parameter);
+            Query(query, parameters);
+        }
         /// <summary>
         /// Select information from DB
         /// </summary>
@@ -79,11 +87,10 @@ namespace AllContent_Client
 
         public List<string> SelectQuery(string query, MySqlParameters parameters)
         {
-            object lock_result = new object();
             using (var mysqlConn = new MySqlConnection())
             {
                 mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
-                mysqlConn.OpenAsync();
+                mysqlConn.Open();
                 if (query.Contains("INSERT INTO"))
                 {
                     throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
@@ -97,18 +104,29 @@ namespace AllContent_Client
                     com.Parameters.Add(param);
 
 
-                var dataReader = com.ExecuteReaderAsync();
+                using (var dataReader = com.ExecuteReader())
+                {
 
 
-                while (dataReader.Result.Read())
-                    lock (lock_result)
-                        result.Add(dataReader.Result.GetString(0));
+                    while (dataReader.Read())
+                    {
+                        try
+                        {
+                            result.Add(dataReader.GetString(0));
+                        }
+                        catch (System.Data.SqlTypes.SqlNullValueException)
+                        {
+                            dataReader.Close();
+                            return result;
 
+                        }
+                    }
 
-                dataReader.Result.Close();
+                    dataReader.Close();
 
+                    return result;
 
-                return result;
+                }
             }
         }
         /// <summary>

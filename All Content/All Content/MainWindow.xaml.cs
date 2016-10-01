@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace All_Content
 {
@@ -35,7 +36,7 @@ namespace All_Content
 
             refresh_timer = new DispatcherTimer();
             refresh_timer.Tick += Refresh_timer_Tick;
-            refresh_timer.Interval = new TimeSpan(0, 2, 5);
+            refresh_timer.Interval = new TimeSpan(0, 0, 40);
 
             button_off.Click += Button_off_Click;
             button_on.Click += Button_on_Click;
@@ -45,9 +46,10 @@ namespace All_Content
 
         }
 
-
+        
         private async void Refresh_timer_Tick(object sender, EventArgs e)
         {
+            
             status.Background = Brushes.ForestGreen;
             status.Content = "Parsing status: active";
             time_of_last_pars.Content = "Последний парсинг начат в: " + DateTime.Now.ToShortTimeString();
@@ -59,9 +61,12 @@ namespace All_Content
                     site.Pars();
                 }catch (Exception exc)
                 {
-                    string name = site.GetType().FullName;
-                    all_info_block.Text += "Исключение при парсинге " + name + " " + DateTime.Now.ToShortTimeString() + "\n";
-                    all_info_block.Text += exc.GetType().FullName + " " + exc.Message;
+                        Dispatcher.BeginInvoke(new Action(() => { 
+                        string name = site.GetType().FullName;
+                        all_info_block.Text += "Исключение при парсинге " + name + " " + DateTime.Now.ToShortTimeString() + "\n";
+                        all_info_block.Text += exc.GetType().FullName + " " + exc.Message;
+                    }));
+                    
                 }
             });
             

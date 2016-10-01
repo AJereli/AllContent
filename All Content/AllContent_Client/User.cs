@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
-
+using System.Windows;
 namespace AllContent_Client
 {
     class User
@@ -16,26 +16,64 @@ namespace AllContent_Client
         public User()
         {
             mysql_client = new DBClient();
-
+            Favorites = new List<string>();
         }
 
-        public bool Autorisation(string login, string password)
+        private void DownloadFavoritesSources()
+        {
+            string query = @"SELECT favorites_source FROM users WHERE login = @login;";
+            List<string> favor_sources = mysql_client.SelectQuery(query, new MySqlParameter("login", Name));
+            if (favor_sources.Count == 0)
+                return;
+            var tmp_favor = favor_sources[0].Split(';');
+            for (int i = 0; i < tmp_favor.Length; ++i)
+                if (tmp_favor[i] != "")
+                    Favorites.Add(tmp_favor[i] + ";");
+        }
+
+        private string ListToString()
+        {
+            string ans = "";
+            foreach (var str in Favorites)
+                ans += str;
+            return ans;
+        }
+
+        public void AddFavoritRubroc(string rubric)
+        {
+            throw new Exception("Функция не реализованна");
+        }
+        public void AddFavoritSource(string source)
+        {
+            Favorites.Add(source + ";");
+
+            string query = @"UPDATE users SET favorites_source=@favorite_source WHERE login=@login";
+            MySqlParameters msp = new MySqlParameters();
+            msp.AddParameter(new MySqlParameter("favorite_source", ListToString()));
+            msp.AddParameter(new MySqlParameter("login", @Name));
+            mysql_client.Query(query, msp);
+        }
+        public bool Authorization(string login, string password)
         {
             string query = @"SELECT password FROM users WHERE login = @login;";
             List<string> hashed_pass = mysql_client.SelectQuery(query, new MySqlParameter("login", login));
             if (hashed_pass.Count == 0)
-            {
-                // СОБЫТИЕ ОТСУТСВИЯ ЛОГИНА
                 return false;
+
+            if (MD5Hashing.CompareHashes(password, hashed_pass[0]))
+            {
+                Name = login;
+                DownloadFavoritesSources();
+                return true;
             }
-            return MD5Hashing.CompareHashes(password, hashed_pass[0]);
+            else return false;
 
         }
 
         public bool Registration(string login, string password)
         {
             string query = @"SELECT password FROM users WHERE login = @login;";
-            
+
             if (mysql_client.SelectQuery(query, new MySqlParameter("login", login)).Count > 0)
                 return false;
             else
@@ -46,7 +84,7 @@ namespace AllContent_Client
 
                 mysql_params.AddParameter(param_login);
                 mysql_params.AddParameter(param_pass);
-                mysql_client.Query("INSERT INTO user (login, password) VALUES (@login, @password)", mysql_params);
+                mysql_client.Query("INSERT INTO users (login, password) VALUES (@login, @password)", mysql_params);
                 return true;
             }
         }

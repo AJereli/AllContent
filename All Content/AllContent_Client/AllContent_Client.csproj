@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ContentUnit.cs" />
     <Compile Include="DBClient.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="User.cs" />
