@@ -111,8 +111,9 @@ namespace AllContent_Client
                     while (dataReader.Read())
                     {
                         try
-                        {
-                            result.Add(dataReader.GetString(0));
+                        { 
+                            for (int i = 0; i < dataReader.FieldCount; ++i)
+                                result.Add(dataReader.GetString(i));
                         }
                         catch (System.Data.SqlTypes.SqlNullValueException)
                         {

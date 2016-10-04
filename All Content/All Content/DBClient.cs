@@ -90,7 +90,7 @@ namespace All_Content
                     com.Parameters.AddWithValue("@source", cu.source);
                     com.Parameters.AddWithValue("@date", cu.date);
                     com.Parameters.AddWithValue("@time_of_addition", cu.time_of_addition.ToShortDateString());
-                    
+
                     MySqlDataReader dataReader = com.ExecuteReader();
                     dataReader.Read();
                     dataReader.Close();
@@ -106,26 +106,25 @@ namespace All_Content
         {
             using (var mysqlConn = new MySqlConnection())
             {
-                lock (threadLockSelect)
+
+                mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+                mysqlConn.Open();
+                if (query.Contains("INSERT INTO"))
                 {
-                    mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
-                    mysqlConn.Open();
-                    if (query.Contains("INSERT INTO"))
-                    {
-                        throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
-                    }
-                    List<string> result = new List<string>();
-
-                    MySqlCommand command = new MySqlCommand(@query, mysqlConn);
-                    MySqlDataReader dataReader = command.ExecuteReader();
-                    while (dataReader.Read())
-                        result.Add(dataReader.GetString(0));
-
-                    dataReader.Close();
-
-
-                    return result;
+                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
                 }
+                List<string> result = new List<string>();
+
+                MySqlCommand command = new MySqlCommand(@query, mysqlConn);
+                MySqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                    result.Add(dataReader.GetString(0));
+
+                dataReader.Close();
+
+
+                return result;
+
             }
 
         }

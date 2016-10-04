@@ -26,7 +26,7 @@ namespace All_Content
         List<SiteForPars> all_sites;
         public MainWindow()
         {
-           
+
             InitializeComponent();
             all_sites = new List<SiteForPars>();
             InitializationSites();
@@ -36,7 +36,7 @@ namespace All_Content
 
             refresh_timer = new DispatcherTimer();
             refresh_timer.Tick += Refresh_timer_Tick;
-            refresh_timer.Interval = new TimeSpan(0, 0, 40);
+            refresh_timer.Interval = new TimeSpan(0, 6, 0);
 
             button_off.Click += Button_off_Click;
             button_on.Click += Button_on_Click;
@@ -46,10 +46,10 @@ namespace All_Content
 
         }
 
-        
+
         private async void Refresh_timer_Tick(object sender, EventArgs e)
         {
-            
+
             status.Background = Brushes.ForestGreen;
             status.Content = "Parsing status: active";
             time_of_last_pars.Content = "Последний парсинг начат в: " + DateTime.Now.ToShortTimeString();
@@ -59,17 +59,19 @@ namespace All_Content
                 try
                 {
                     site.Pars();
-                }catch (Exception exc)
+                }
+                catch (Exception exc)
                 {
-                        Dispatcher.BeginInvoke(new Action(() => { 
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
                         string name = site.GetType().FullName;
                         all_info_block.Text += "Исключение при парсинге " + name + " " + DateTime.Now.ToShortTimeString() + "\n";
-                        all_info_block.Text += exc.GetType().FullName + " " + exc.Message;
+                        all_info_block.Text += exc.GetType().FullName + " " + exc.Message + "\n";
                     }));
-                    
+
                 }
             });
-            
+
         }
         private void Passw_KeyDown(object sender, KeyEventArgs e)
         {
@@ -103,7 +105,7 @@ namespace All_Content
 
         private void InitializationSites()
         {
-           all_sites.Add(new NplusOne());
+            all_sites.Add(new NplusOne());
             all_sites.Add(new KinoPoisk());
             all_sites.Add(new Kanobu());
             all_sites.Add(new LentaRu());
@@ -128,7 +130,7 @@ namespace All_Content
             {
                 refresh_timer.Interval = new TimeSpan(0, Convert.ToInt32(input_interval.Text), 0);
                 lable_info.Content = "Новое время обновления: " + input_interval.Text;
-                cur_inter_time.Content = "Curr time: "+ input_interval.Text + "min";
+                cur_inter_time.Content = "Curr time: " + input_interval.Text + "min";
                 input_interval.Text = "";
             }
             catch (FormatException)
