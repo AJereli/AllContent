@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AngleSharp">
-      <HintPath>..\..\..\..\..\Desktop\AngleSharp-master\src\AngleSharp\bin\Release\v4.5\AngleSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AngleSharp\src\packages\AngleSharp.0.9.6\lib\dotnet\AngleSharp.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\..\..\..\Downloads\v4.5\MySql.Data.dll</HintPath>
@@ -60,16 +60,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdMe.cs" />
     <Compile Include="ContentUnit.cs" />
     <Compile Include="Kanobu.cs" />
     <Compile Include="KinoPoisk.cs" />
     <Compile Include="LentaRu.cs" />
+    <Compile Include="LibrebookNews.cs" />
     <Compile Include="LifeHacker.cs" />
     <Compile Include="NplusOne.cs" />
     <Compile Include="RiaNews.cs" />
     <Compile Include="RoemInvesticii.cs" />
     <Compile Include="RoemMedia.cs" />
     <Compile Include="SiteForPars.cs" />
+    <Compile Include="Starhit.cs" />
     <Compile Include="TheVillagePars.cs" />
     <Compile Include="TJpars.cs" />
     <Page Include="MainWindow.xaml">
