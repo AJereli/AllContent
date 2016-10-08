@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace AllContent_Client
 {
-    class ContentUnit
-
+    class ContentUnit : IDisposable
     {
-        DBClient client;
-        static public int ID { get; private set; }
+        public uint ID { get; set; }
         public string header { get; set; }
         public string description { get; set; }
         public string imgUrl { get; set; }
@@ -22,10 +20,12 @@ namespace AllContent_Client
 
         public ContentUnit()
         {
-            client = new DBClient();
+            date = header = imgUrl = description = URL = tags = source = "";
         }
 
-         
-
+        public void Dispose()
+        {
+            date = header = imgUrl = description = URL = tags = source = null;
+        }
     }
 }

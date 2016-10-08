@@ -9,7 +9,7 @@ namespace All_Content
     class ContentUnit
     {
         DBClient client;
-        static public int ID { get; private set; }
+        public int ID { get; private set; }
         public string header { get; set; }
         public string description { get; set; }
         public string imgUrl { get; set; }

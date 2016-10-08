@@ -11,8 +11,8 @@ namespace AllContent_Client
     {
         DBClient mysql_client;
 
-        public string Name { get; private set; }
-        public List<string> Favorites { get; private set; }
+        static public string Name { get; private set; }
+        static public List<string> Favorites { get; private set; }
         public User()
         {
             mysql_client = new DBClient();
@@ -39,7 +39,7 @@ namespace AllContent_Client
             return ans;
         }
 
-        public void AddFavoritRubroc(string rubric)
+        public void AddFavoritRubric(string rubric)
         {
             throw new Exception("Функция не реализованна");
         }

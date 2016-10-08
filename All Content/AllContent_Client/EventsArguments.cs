@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace AllContent_Client
 {
+    enum TypeOfFavoritesChange
+    {
+        Add,
+        Delete
+    }
+
     class EventAuthorizationArgs : EventArgs
     {
         public bool Result { get; private set; }
@@ -19,11 +25,13 @@ namespace AllContent_Client
 
     class EventFavoritesArgs : EventArgs
     {
-        public Favorites favor { get; private set; }
 
-        public EventFavoritesArgs(Favorites curr_fav)
+        public TypeOfFavoritesChange Type { get; }
+        public string Name { get; }
+        public EventFavoritesArgs(string name, TypeOfFavoritesChange type)
         {
-            favor = curr_fav;
+            Type = type;
+            Name = name;
         }
     }
 }

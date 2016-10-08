@@ -9,7 +9,7 @@ namespace AllContent_Client
 {
 
 
-    class DBClient
+    class DBClient : IDisposable
     {
 
 
@@ -140,6 +140,41 @@ namespace AllContent_Client
             parameters.AddParameter(parameter);
             return SelectQuery(query, parameters);
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // Для определения избыточных вызовов
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    mysqlConn.Dispose();
+                   
+                }
+
+                mysqlCSB = null;
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: переопределить метод завершения, только если Dispose(bool disposing) выше включает код для освобождения неуправляемых ресурсов.
+        // ~DBClient() {
+        //   // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+        //   Dispose(false);
+        // }
+
+        // Этот код добавлен для правильной реализации шаблона высвобождаемого класса.
+        public void Dispose()
+        {
+            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            Dispose(true);
+            // TODO: раскомментировать следующую строку, если метод завершения переопределен выше.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
     class MySqlParameters : IEnumerable
     {
