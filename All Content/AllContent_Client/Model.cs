@@ -18,27 +18,21 @@ namespace AllContent_Client
 
         static public ObservableCollection<ContentUnit> content_collect { get; private set; }
         static public uint max_age_news = 2;
-        public Favorites favorites { get; private set; }
         public uint RefreshTime { get; set; }
 
 
-        User user;
-        DBClient mysql_client;
+        static public User user { get; set; }
         BackgroundWorker loadAllContent;
         public Model()
         {
 
-            View.RefreshContent += View_RefreshContent;
-            user = new User();
-            mysql_client = new DBClient();
-            favorites = new Favorites();
-
+            MainView.RefreshContent += View_RefreshContent;
             loadAllContent = new BackgroundWorker();
             loadAllContent.DoWork += LoadAllContent_DoWork;
 
 
             content_collect = new ObservableCollection<ContentUnit>();
-            favorites.FavoritesChange += Favorites_FavoritesChange;
+            user.favorites.FavoritesChange += Favorites_FavoritesChange;
 
 
             loadAllContent.RunWorkerAsync();
@@ -55,10 +49,16 @@ namespace AllContent_Client
             EventFavoritesArgs args = ((EventFavoritesArgs)e);
             if (args.Type == TypeOfFavoritesChange.Delete)
                 foreach (var cu in content_collect.Where(unit => unit.source == args.Name))
+                {
                     content_collect.Remove(cu);
+                    
+                }
 
 
         }
+
+        
+
 
         private void View_RefreshContent(object sender, EventArgs e)
         {
@@ -79,7 +79,7 @@ namespace AllContent_Client
 
         private void LoadAllContent_DoWork(object sender, DoWorkEventArgs e)
         {
-            favorites.LoadFavoritesContent();
+            user.favorites.LoadFavoritesContent();
         }
 
     }

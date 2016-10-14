@@ -61,6 +61,9 @@
     <Compile Include="AuthorizPage.xaml.cs">
       <DependentUpon>AuthorizPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AuthorizWin.xaml.cs">
+      <DependentUpon>AuthorizWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ContentUnit.cs" />
     <Compile Include="DBClient.cs" />
     <Compile Include="EventsArguments.cs" />
@@ -71,6 +74,10 @@
     </Compile>
     <Compile Include="User.cs" />
     <Page Include="AuthorizPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AuthorizWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

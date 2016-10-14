@@ -7,52 +7,24 @@ using MySql.Data.MySqlClient;
 using System.Windows;
 namespace AllContent_Client
 {
-    class User
+   public class User
     {
         DBClient mysql_client;
 
         static public string Name { get; private set; }
-        static public List<string> Favorites { get; private set; }
+        public Favorites favorites { get; private set; }
         public User()
         {
             mysql_client = new DBClient();
-            Favorites = new List<string>();
         }
 
-        private void DownloadFavoritesSources()
-        {
-            string query = @"SELECT favorites_source FROM users WHERE login = @login;";
-            List<string> favor_sources = mysql_client.SelectQuery(query, new MySqlParameter("login", Name));
-            if (favor_sources.Count == 0)
-                return;
-            var tmp_favor = favor_sources[0].Split(';');
-            for (int i = 0; i < tmp_favor.Length; ++i)
-                if (tmp_favor[i] != "")
-                    Favorites.Add(tmp_favor[i] + ";");
-        }
-
-        private string ListToString()
-        {
-            string ans = "";
-            foreach (var str in Favorites)
-                ans += str;
-            return ans;
-        }
+         
 
         public void AddFavoritRubric(string rubric)
         {
             throw new Exception("Функция не реализованна");
         }
-        public void AddFavoritSource(string source)
-        {
-            Favorites.Add(source + ";");
-
-            string query = @"UPDATE users SET favorites_source=@favorite_source WHERE login=@login";
-            MySqlParameters msp = new MySqlParameters();
-            msp.AddParameter(new MySqlParameter("favorite_source", ListToString()));
-            msp.AddParameter(new MySqlParameter("login", @Name));
-            mysql_client.Query(query, msp);
-        }
+       
         public bool Authorization(string login, string password)
         {
             string query = @"SELECT password FROM users WHERE login = @login;";
@@ -63,7 +35,7 @@ namespace AllContent_Client
             if (MD5Hashing.CompareHashes(password, hashed_pass[0]))
             {
                 Name = login;
-                DownloadFavoritesSources();
+                favorites = new Favorites(Name);
                 return true;
             }
             else return false;

@@ -16,23 +16,21 @@ using System.Windows.Shapes;
 namespace AllContent_Client
 {
     /// <summary>
-    /// Логика взаимодействия для AuthorizPage.xaml
+    /// Логика взаимодействия для AuthorizWin.xaml
     /// </summary>
-    public partial class AuthorizPage : Page
+    public partial class AuthorizWin : Window
     {
-
         bool first_Login_Focus = true;
         NavigationWindow win;
         User user;
-        public AuthorizPage()
+        Frame frame;
+        public AuthorizWin()
         {
             InitializeComponent();
-            // ShowsNavigationUI = true;
-            WindowHeight = 550;
-            WindowWidth = 300;
+            Height = 550;
+            Width = 300;
             button.Click += Button_Click;
             Loaded += AuthorizPage_Loaded;
-
         }
 
         private void AuthorizPage_Loaded(object sender, RoutedEventArgs e)
@@ -54,13 +52,14 @@ namespace AllContent_Client
                 if (user.Authorization(loginBox.Text, passwordBox.Password))
                 {
                     Model.user = this.user;
-                    Content = new MainView();
-                    //NavigationService.Navigate(new Uri("/MainView.xaml", UriKind.Relative));
+                  
+                    
                 }
                 else
                     infoLable.Content = "Неверный логин или пароль";
-                
-            }catch(MySql.Data.MySqlClient.MySqlException exp)
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException exp)
             {
                 if (exp.Number == 1024)
                     infoLable.Content = "Проблемы с подключением";

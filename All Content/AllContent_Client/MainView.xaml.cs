@@ -19,26 +19,22 @@ namespace AllContent_Client
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class View : Window
+    public partial class MainView : Window
     {
 
 
         static public event EventHandler RefreshContent = delegate { };
 
         Model model;
-        public View()
+        
+        public MainView()
         {
             model = new Model();
             model.AuthorizationEvent += Model_AuthorizationEvent;
             Model.content_collect.CollectionChanged += Cont_collect_CollectionChanged;
-            User user = new User();
             InitializeComponent();
-            InitAllFavorites();
             button_refresh_favor.Click += Button_refresh_favor_Click;
-            if (user.Authorization("MyLogin", "MyPassword"))
-            {
-                lable_name.Content = user.Name;
-            }
+            
 
         }
 
@@ -47,29 +43,7 @@ namespace AllContent_Client
             model.RefreshAllContent();
         }
 
-        private void InitAllFavorites()
-        {
-            List<Tuple<string, string>> favorites = new List<Tuple<string, string>>();
-            favorites.Add(new Tuple<string, string>("LentaRu", "https://lenta.ru"));
-            favorites.Add(new Tuple<string, string>("TJ", "https://tjournal.ru"));
-            favorites.Add(new Tuple<string, string>("Ria", "https://ria.ru/lenta"));
-
-            for (int i = 0; i < favorites.Count; ++i)
-            {
-                CheckBox cb = new CheckBox()
-                {
-                    Name = favorites[i].Item1,
-                    Content = favorites[i].Item2,
-                    Height = 20,
-                    VerticalAlignment = VerticalAlignment.Top
-                };
-                cb.Checked += (s, e) => model.favorites.Add(((CheckBox)s).Name, (string)((CheckBox)s).Content);
-                cb.Unchecked += (s, e) => model.favorites.Delete(((CheckBox)s).Name, (string)((CheckBox)s).Content);
-                cb.Margin = new Thickness(0, cb.Height * i, 0, 0);
-                grid_favor_CB.Children.Add(cb);
-            }
-
-        }
+      
 
 
         private void Cont_collect_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

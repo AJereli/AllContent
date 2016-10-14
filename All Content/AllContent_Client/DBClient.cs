@@ -90,7 +90,9 @@ namespace AllContent_Client
             using (var mysqlConn = new MySqlConnection())
             {
                 mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+
                 mysqlConn.Open();
+                
                 if (query.Contains("INSERT INTO"))
                 {
                     throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");

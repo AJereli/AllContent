@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-
+using MySql.Data.MySqlClient;
 namespace AllContent_Client
 {
-    class Favorit
+    public class Favorit
     {
         private const uint cntOfColumns = 7;
         private uint CurrentNewsID = 0;
@@ -49,7 +49,7 @@ namespace AllContent_Client
 
                     List<string> chek_id = mysql_client.SelectQuery("SELECT MAX(id) FROM content " +
                            "WHERE source = @" + Name, param);
-                   
+
 
                     if (Convert.ToUInt32(chek_id[0]) > CurrentNewsID)
                     {
@@ -94,17 +94,35 @@ namespace AllContent_Client
 
 
     }
-    class Favorites
+    public class Favorites
     {
         public event EventHandler FavoritesChange = delegate { };
         private object loadLock = new object();
 
         public List<Favorit> current_favorites { get; private set; }
-        public Favorites()
-        {
-            current_favorites = new List<Favorit>();
-        }
 
+        string UserName;
+
+        public Favorites(string user_name)
+        {
+            UserName = user_name;
+            current_favorites = new List<Favorit>();
+            InitFavorites();
+        }
+        private void InitFavorites()
+        {
+            using (DBClient client = new DBClient())
+            {
+                List<string> tmp = new List<string>();
+                tmp = client.SelectQuery("SELECT favorites_source FROM users WHERE login=@login", new MySqlParameter("login", UserName));
+                foreach (var str in tmp[0].Split(';'))
+                {
+                    if (str == "")
+                        continue;
+                    current_favorites.Add(new Favorit(str, str));
+                }
+            }
+        }
 
         public void LoadFavoritesContent()
         {
@@ -116,30 +134,44 @@ namespace AllContent_Client
         public void Add(Favorit favor)
         {
             lock (loadLock)
+            {
                 current_favorites.Add(favor);
+                using (DBClient client = new DBClient())
+                {
+                    List<string> tmp = new List<string>();
+                    tmp = client.SelectQuery("SELECT favorites_source FROM users WHERE login=@login", new MySqlParameter("login", UserName));
+                    tmp[0] += favor.Value + ";";
+                }
+            }
             FavoritesChange(this, new EventFavoritesArgs(favor.Name, TypeOfFavoritesChange.Add));
         }
 
         public void Add(string name, string value)
         {
             Favorit favor = new Favorit(name, value);
-            lock (loadLock)
-                current_favorites.Add(favor);
-            FavoritesChange(this, new EventFavoritesArgs(name, TypeOfFavoritesChange.Add));
+            Add(favor);
         }
 
         public void Delete(Favorit favor)
         {
             lock (loadLock)
+            {
                 current_favorites.Remove(favor);
+                using (DBClient client = new DBClient())
+                {
+                    List<string> tmp = new List<string>();
+                    tmp = client.SelectQuery("SELECT favorites_source FROM users WHERE login=@login", new MySqlParameter("login", UserName));
+                    MessageBox.Show("Old tmp\n" + tmp[0]);
+                    tmp[0] = tmp[0].Replace(favor.Value + ";", "");
+                    MessageBox.Show("new tmp\n" + tmp[0]);
+                }
+            }
             FavoritesChange(this, new EventFavoritesArgs(favor.Name, TypeOfFavoritesChange.Delete));
         }
         public void Delete(string name, string value)
         {
             Favorit favor = new Favorit(name, value);
-            lock (loadLock)
-                current_favorites.Remove(favor);
-            FavoritesChange(this, new EventFavoritesArgs(name, TypeOfFavoritesChange.Delete));
+            Delete(favor);
         }
     }
 }
