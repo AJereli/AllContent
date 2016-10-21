@@ -22,7 +22,7 @@ namespace AllContent_Client
     {
 
         bool first_Login_Focus = true;
-        NavigationWindow win;
+        NavigationService nav;
         User user;
         public AuthorizPage()
         {
@@ -37,7 +37,7 @@ namespace AllContent_Client
 
         private void AuthorizPage_Loaded(object sender, RoutedEventArgs e)
         {
-            win = (NavigationWindow)Window.GetWindow(this);
+            nav = NavigationService.GetNavigationService(this);
 
         }
 
@@ -54,7 +54,9 @@ namespace AllContent_Client
                 if (user.Authorization(loginBox.Text, passwordBox.Password))
                 {
                     Model.user = this.user;
-                    Content = new MainView();
+                    MainView mv = new MainView();
+                    mv.Show();
+                    nav.Navigate(mv);
                     //NavigationService.Navigate(new Uri("/MainView.xaml", UriKind.Relative));
                 }
                 else

@@ -24,6 +24,8 @@ namespace All_Content
         DispatcherTimer refresh_timer;
         DBClient client;
         List<SiteForPars> all_sites;
+
+        object pars_lock = new object();
         public MainWindow()
         {
 
@@ -31,12 +33,13 @@ namespace All_Content
             all_sites = new List<SiteForPars>();
             InitializationSites();
 
+            ContentUnit.Row_limit = 5000;
 
             client = new DBClient();
 
             refresh_timer = new DispatcherTimer();
             refresh_timer.Tick += Refresh_timer_Tick;
-            refresh_timer.Interval = new TimeSpan(0, 6, 0);
+            refresh_timer.Interval = new TimeSpan(0, 0, 30);
 
             button_off.Click += Button_off_Click;
             button_on.Click += Button_on_Click;
@@ -58,7 +61,8 @@ namespace All_Content
             {
                 try
                 {
-                    site.Pars();
+                    lock(pars_lock)
+                        site.Pars();
                 }
                 catch (Exception exc)
                 {
@@ -115,6 +119,10 @@ namespace All_Content
             all_sites.Add(new RoemMedia());
             all_sites.Add(new LifeHacker());
             all_sites.Add(new RiaNews());
+            all_sites.Add(new DiletantMedia());
+            all_sites.Add(new LibrebookNews());
+            all_sites.Add(new AdMe());
+            all_sites.Add(new Starhit());
         }
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
@@ -137,6 +145,21 @@ namespace All_Content
             {
                 lable_info.Content = "Неверный формат ввода =(";
             }
+        }
+
+        private void button_limit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                uint lim = (uint)Convert.ToInt32(textBox_lim.Text);
+                ContentUnit.Row_limit = lim;
+                limit_label.Content = "Curr limit: " + lim.ToString() + " row";
+            }
+            catch
+            {
+                lable_info.Content = "Неверный формат ввода =(";
+            }
+            
         }
     }
 }
