@@ -55,14 +55,15 @@ namespace AllContent_Client
                 {
                     Model.user = this.user;
                     MainView mv = new MainView();
-                    mv.Show();
-                    nav.Navigate(mv);
-                    //NavigationService.Navigate(new Uri("/MainView.xaml", UriKind.Relative));
+                    // mv.Show();
+                   // NavigationService.Navigate(new Uri())
+                    NavigationService.Navigate(new Uri("/MainView.xaml", UriKind.Relative));
                 }
                 else
                     infoLable.Content = "Неверный логин или пароль";
-                
-            }catch(MySql.Data.MySqlClient.MySqlException exp)
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException exp)
             {
                 if (exp.Number == 1024)
                     infoLable.Content = "Проблемы с подключением";

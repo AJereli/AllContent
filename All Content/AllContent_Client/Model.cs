@@ -17,7 +17,7 @@ namespace AllContent_Client
         public event EventHandler AuthorizationEvent = delegate { };
 
         static public ObservableCollection<ContentUnit> content_collect { get; private set; }
-        static public uint max_age_news = 2;
+        static public uint max_age_news = 1;
         public uint RefreshTime { get; set; }
 
 
@@ -47,17 +47,20 @@ namespace AllContent_Client
         private void Favorites_FavoritesChange(object sender, EventArgs e)
         {
             EventFavoritesArgs args = ((EventFavoritesArgs)e);
+            var md = content_collect.Where(unit => unit.source == args.Name);
             if (args.Type == TypeOfFavoritesChange.Delete)
-                foreach (var cu in content_collect.Where(unit => unit.source == args.Name))
-                {
+                foreach (ContentUnit cu in md)
                     content_collect.Remove(cu);
-                    
-                }
+            
+            else if (args.Type == TypeOfFavoritesChange.Add)
+            {
+
+            }
 
 
         }
 
-        
+
 
 
         private void View_RefreshContent(object sender, EventArgs e)
