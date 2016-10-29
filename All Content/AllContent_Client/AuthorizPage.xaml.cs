@@ -53,10 +53,7 @@ namespace AllContent_Client
             {
                 if (user.Authorization(loginBox.Text, passwordBox.Password))
                 {
-                    Model.user = this.user;
-                    MainView mv = new MainView();
-                    // mv.Show();
-                   // NavigationService.Navigate(new Uri())
+                    MainView.user = this.user;
                     NavigationService.Navigate(new Uri("/MainView.xaml", UriKind.Relative));
                 }
                 else
@@ -75,6 +72,14 @@ namespace AllContent_Client
             if (first_Login_Focus)
                 loginBox.Text = "";
             first_Login_Focus = false;
+        }
+
+        private void uhuhu_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Button_Click(sender, e);
+            }
         }
     }
 }

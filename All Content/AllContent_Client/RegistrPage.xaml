@@ -5,10 +5,16 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AllContent_Client"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="RegistrPage">
+         d:DesignHeight="300" d:DesignWidth="300"
+      Title="Регистрация" ShowsNavigationUI="False" Width="300" Height="550" MaxWidth="400" MaxHeight="650" ScrollViewer.CanContentScroll="True">
+
 
     <Grid>
-        
+        <TextBox x:Name="tb_login" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Login" VerticalAlignment="Top" Width="150" Margin="78,127,0,0"/>
+        <TextBox x:Name="tb_password" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="150" Margin="78,170,0,0"/>
+        <TextBox x:Name="tb_email" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Email" VerticalAlignment="Top" Width="150" Margin="78,212,0,0"/>
+        <Button x:Name="ok_button" Content="Регистрация" HorizontalAlignment="Left" Margin="107,277,0,0" VerticalAlignment="Top" Width="92"/>
+        <Label x:Name="label_info" Content="" HorizontalAlignment="Left" Margin="31,85,0,0" VerticalAlignment="Top" Width="245"/>
+
     </Grid>
 </Page>

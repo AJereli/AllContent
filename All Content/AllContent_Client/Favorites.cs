@@ -8,213 +8,138 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using MySql.Data.MySqlClient;
+using System.Collections;
+
 namespace AllContent_Client
 {
-    public class Favorit
+    class Favorit
     {
-        private const uint cntOfColumns = 7;
-        private uint CurrentNewsID = 0;
+        public string Source { get; private set; }
+        public List<ContentUnit> content;
+        public int SelectLimit { get; set; }
+        private int CurrId;
+        List<string> selectResult = null;
 
-        private bool IsSource;
-        public bool IsSelect { get; set; }
-        public string Name { get; private set; }
-        public string Value { get; private set; }
-        public Favorit(string name, string value)
+        MySqlParameter sqlParamSource;
+
+        public Favorit(string source)
         {
-            Name = name;
-            Value = value;
-            if (Name.Contains("http:") || Name.Contains("https:"))
-            {
-                Name = Name.Split(':')[1];
-                Name = Name.Replace('/', '_');
-
-            }
-            if (Value.Contains("http:") || Value.Contains("https:"))
-                IsSource = true;
-            else IsSource = false;
+            SelectLimit = 10;
+            Source = source;
+            content = new List<ContentUnit>();
+            sqlParamSource = new MySqlParameter("sour", source);
         }
 
-        private void LoadFromSource()
+        public void LoadAll()
         {
-            using (DBClient mysql_client = new DBClient())
+            using (DBClient client = new DBClient())
             {
-                MySqlParameters mysql_param = new MySqlParameters();
-                mysql_param.AddParameter(Name, Value);
-
-                DateTime day_ago = DateTime.Now.AddDays(-Model.max_age_news);
-                string day_ago_str = day_ago.ToString("d", new CultureInfo(("en-US")));
-
-                mysql_param.AddParameter("date", day_ago_str);
-                List<string> contents = null;
-                if (CurrentNewsID == 0)
-                {
-                    contents = mysql_client.SelectQuery("SELECT id, header, description, imgUrl, URL, tags, source, date FROM content " +
-                            "WHERE source=@" + Name + " AND time_of_addition > @date LIMIT 20"
-                            , mysql_param);
-                }
-                else {
-
-                    List<string> chek_id = mysql_client.SelectQuery("SELECT MAX(id) FROM content " +
-                           "WHERE source = @" + Name, mysql_param);
-
-
-                    if (Convert.ToUInt32(chek_id[0]) > CurrentNewsID)
-                    {
-                        contents = mysql_client.SelectQuery("SELECT id, header, description, imgUrl, URL, tags, source, date FROM content " +
-                                "WHERE source = @" + Name + " AND time_of_addition > @date AND id > " + CurrentNewsID.ToString() +
-                                " ORDER BY id DESC LIMIT 20", mysql_param);
-
-                    }
-
-                }
-                if (contents != null)
-                {
-                    CurrentNewsID = Convert.ToUInt32(contents[0]);
-
-                    for (int i = 0; i < contents.Count; i += 8)
-                    {
-                        ContentUnit cu = new ContentUnit();
-
-                        cu.ID = Convert.ToUInt32(contents[i]);
-                        cu.header = contents[i + 1];
-                        cu.description = contents[i + 2];
-                        cu.imgUrl = contents[i + 3];
-                        cu.URL = contents[i + 4];
-                        cu.tags = contents[i + 5];
-                        cu.source = contents[i + 6];
-                        cu.date = contents[i + 7];
-                        Model.content_collect.Add(cu);
-
-                    }
-                }
-
-
-
+                selectResult = client.SelectQuery("SELECT id, header, description, imgUrl, URL, tags, source, date FROM content " +
+                            "WHERE source=@sour" + " ORDER BY id DESC LIMIT " + SelectLimit
+                            , sqlParamSource);
+                AddToCUList();
             }
         }
-
-        public void LoadFavoritContent()
+        public void Refresh()
         {
-            if (IsSource)
-                LoadFromSource();
+            using (DBClient client = new DBClient())
+            {
+                List<string> chek_id = client.SelectQuery("SELECT MAX(id) FROM content " +
+                          "WHERE source = @" + sqlParamSource.ParameterName, sqlParamSource);
 
 
+                if (Convert.ToUInt32(chek_id[0]) > CurrId)
+                {
+                    selectResult = client.SelectQuery("SELECT id, header, description, imgUrl, URL, tags, source, date FROM content " +
+                            "WHERE source = @" + sqlParamSource.ParameterName + " AND id > " + CurrId.ToString() +
+                            " ORDER BY id DESC LIMIT " + SelectLimit, sqlParamSource);
+                    AddToCUList();
+                }
+            }
         }
+        private void AddToCUList()
+        {
+            if (selectResult != null)
+            {
+                CurrId = (int)Convert.ToUInt32(selectResult[0]);
 
+                for (int i = 0; i < selectResult.Count; i += 8)
+                {
+                    ContentUnit cu = new ContentUnit();
+
+                    cu.ID = Convert.ToUInt32(selectResult[i]);
+                    cu.header = selectResult[i + 1];
+                    cu.description = selectResult[i + 2];
+                    cu.imgUrl = selectResult[i + 3];
+                    cu.URL = selectResult[i + 4];
+                    cu.tags = selectResult[i + 5];
+                    cu.source = selectResult[i + 6];
+                    cu.date = selectResult[i + 7];
+                    content.Add(cu);
+                }
+            }
+        }
 
     }
-    public class Favorites
+
+
+    class FavoritList : IEnumerable<Favorit>
     {
-        public event EventHandler FavoritesChange = delegate { };
-        private object loadLock = new object();
+        public event Action AddEvent = delegate { };
+        public event Action DeleteEvent = delegate { };
 
-        private List<Favorit> current_favorites { get; set; }
-        public List<string> all_favotits;
+        private List<Favorit> favorites;
+        BackgroundWorker refreshAllContent;
 
-        string UserName;
-
-        public Favorites(string user_name)
+        public FavoritList()
         {
-            UserName = user_name;
-            current_favorites = new List<Favorit>();
-            InitAllFavorit();
-            InitFavorites();
+            favorites = new List<Favorit>();
+            refreshAllContent = new BackgroundWorker();
+            refreshAllContent.DoWork += RefreshAllContent_DoWork;
         }
 
-        public bool CheckForSelected(string name)
+        private void RefreshAllContent_DoWork(object sender, DoWorkEventArgs e)
         {
-            var favor = current_favorites.Find(m => m.Value == name);
-            if (favor == null)
-                return false;
-            else return favor.IsSelect;
-        }
-
-        private void InitAllFavorit()
-        {
-            using (DBClient client = new DBClient())
+            foreach (var favor in favorites)
             {
-                all_favotits = new List<string>();
-                List<string> tmp = client.SelectQuery("SELECT favorites_source FROM users WHERE login=@login", new MySqlParameter("login", "$sources"));
-                foreach (var str in tmp[0].Split(';'))
+                favor.Refresh();
+
+            }
+        }
+
+
+        public void RefreshAll()
+        {
+            refreshAllContent.RunWorkerAsync();
+        }
+        public void Add(string source_name, int limit = 10)
+        {
+            Favorit favor = new Favorit(source_name);
+            favor.SelectLimit = limit;
+            favor.LoadAll();
+            favorites.Add(favor);
+
+            AddEvent();
+        }
+        public void Delete(string source_name)
+        {
+            foreach (var favor in favorites)
+                if (favor.Source == source_name)
                 {
-                    if (str != "")
-                        all_favotits.Add(str);
+                    favorites.Remove(favor);
+                    break;
                 }
-            }
+            DeleteEvent();
         }
 
-        private void InitFavorites()
+        public IEnumerator<Favorit> GetEnumerator()
         {
-            using (DBClient client = new DBClient())
-            {
-                List<string> tmp = new List<string>();
-                tmp = client.SelectQuery("SELECT favorites_source FROM users WHERE login=@login", new MySqlParameter("login", UserName));
-                foreach (var str in tmp[0].Split(';'))
-                {
-                    if (str != "")
-                    {
-                        current_favorites.Add(new Favorit(str, str) { IsSelect = true });
-                    }
-                }
-            }
+            return favorites.GetEnumerator();
         }
 
-        public void LoadFavoritesContent()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            lock (loadLock)
-                foreach (var fav in current_favorites)
-                    fav.LoadFavoritContent();
-        }
-
-        public void Add(Favorit favor)
-        {
-            lock (loadLock)
-            {
-                current_favorites.Add(favor);
-                using (DBClient client = new DBClient())
-                {
-                    List<string> tmp = new List<string>();
-                    tmp = client.SelectQuery("SELECT favorites_source FROM users WHERE login=@login ", new MySqlParameter("login", UserName));
-                    tmp[0] += favor.Value + ";";
-                    MySqlParameters sql_params = new MySqlParameters();
-                    sql_params.AddParameter("favors", tmp[0]);
-                    sql_params.AddParameter("name", User.Name);
-                    client.Query("UPDATE users SET favorites_source=@favors WHERE login = @name", sql_params);
-                }
-            }
-            FavoritesChange(this, new EventFavoritesArgs(favor.Name, TypeOfFavoritesChange.Add));
-        }
-
-        public void Add(string name, string value)
-        {
-            Favorit favor = new Favorit(name, value);
-            Add(favor);
-        }
-
-        public void Delete(Favorit favor)
-        {
-
-            current_favorites.Remove(current_favorites.Find(fav => fav.Name == favor.Name));
-
-
-            using (DBClient client = new DBClient())
-            {
-                List<string> tmp = new List<string>();
-                tmp = client.SelectQuery("SELECT favorites_source FROM users WHERE login=@login", new MySqlParameter("login", UserName));
-                tmp[0] = tmp[0].Replace(favor.Value + ";", "");
-                MySqlParameters sql_params = new MySqlParameters();
-                sql_params.AddParameter("favors", tmp[0]);
-                sql_params.AddParameter("name", User.Name);
-                client.Query("UPDATE users SET favorites_source=@favors WHERE login = @name", sql_params);
-                FavoritesChange(this, new EventFavoritesArgs(favor.Value, TypeOfFavoritesChange.Delete));
-
-            }
-
-        }
-        public void Delete(string name, string value)
-        {
-            Favorit favor = new Favorit(name, value);
-            Delete(favor);
+            return favorites.GetEnumerator();
         }
     }
 }

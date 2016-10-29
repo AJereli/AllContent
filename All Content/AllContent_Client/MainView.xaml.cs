@@ -7,12 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Specialized;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MySql.Data.MySqlClient;
 
 namespace AllContent_Client
 {
@@ -23,94 +18,85 @@ namespace AllContent_Client
     {
 
 
-        static public event EventHandler RefreshContent = delegate { };
-
-        Model model;
-
+        FavoritList favorites;
+        List<ContentUnit> all_content = new List<ContentUnit>();
+        List<string> all_source { get; set; }
+        static public User user { get; set; }
         public MainView()
         {
-            model = new Model();
-            model.AuthorizationEvent += Model_AuthorizationEvent;
-            Model.content_collect.CollectionChanged += Cont_collect_CollectionChanged;
             InitializeComponent();
-            button_refresh_favor.Click += Button_refresh_favor_Click;
-            WindowHeight = Height;
-            WindowWidth = Width;
+            favorites = new FavoritList();
+            favorites.AddEvent += Favorites_AddEvent;
+            favorites.DeleteEvent += Favorites_DeleteEvent;
+            all_source = new List<string>();
             InitAllSource();
+            user.LoadFavoritSources();
+            foreach (var str in user.favoritSources)
+                favorites.Add(str);
+            lb_content.ItemsSource = all_content;
+            InitCheckBoxs();
+
         }
 
+        private void Favorites_DeleteEvent()
+        {
+            all_content = new List<ContentUnit>();
+            foreach (var fav in favorites)
+                all_content.AddRange(fav.content);
+            lb_content.ItemsSource = all_content;
+        }
+
+        private void Favorites_AddEvent()
+        {
+            all_content = new List<ContentUnit>();
+            foreach (var fav in favorites)
+                all_content.AddRange(fav.content);
+            lb_content.ItemsSource = all_content;
+
+        }
 
         private void InitAllSource()
         {
-            int i = 0;
-            foreach (var str in Model.user.favorites.all_favotits)
+            using (DBClient client = new DBClient())
             {
-                CheckBox source_box = new CheckBox();
-                source_box.Content = str;
-                source_box.Width = 150;
-                source_box.Height = 20;
-                source_box.Margin = new Thickness(0, 25*i, 0, 0);
-                if (Model.user.favorites.CheckForSelected(str))
-                    source_box.IsChecked = true;
-                source_box.Checked += Source_box_Checked;
-                source_box.Unchecked += Source_box_Unchecked;
-               
-                grid_favor_CB.Children.Add(source_box);
-                i++;
-
+                string sources = client.SelectQuery("SELECT favorites_source FROM users WHERE login = @login", new MySqlParameter("login", "$sources"))[0];
+                foreach (var str in sources.Split(';'))
+                    if (str != "")
+                        all_source.Add(str);
             }
 
         }
 
-        private void Source_box_Unchecked(object sender, RoutedEventArgs e)
+        private void InitCheckBoxs()
         {
-            string source = (string)((CheckBox)sender).Content;
-            Model.user.favorites.Delete(source, source);
-            model.RefreshAllContent();
-        }
-
-        private void Source_box_Checked(object sender, RoutedEventArgs e)
-        {
-
-            string source = (string)((CheckBox)sender).Content;
-            Model.user.favorites.Add(source, source);
-            model.RefreshAllContent();
-        }
-
-        private void Button_refresh_favor_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-
-
-
-        private void Cont_collect_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            foreach (var str in all_source)
             {
-                foreach (ContentUnit item in e.NewItems)
-                {
-
-                    Dispatcher.Invoke(new Action(() => { tb.Text += item.header + "\n" + item.description + "\n\n"; }));
-                }
-            }else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach (ContentUnit cu in e.NewItems)
-                {
-                    tb.Text = "";
-                    Dispatcher.Invoke(new Action(() => { tb.Text += cu.header + "\n" + cu.description + "\n\n"; }));
-                }
+                CheckBox cb = new CheckBox() { Height = 20, Width = 240, Content = str };
+                if (user.favoritSources.Contains(str))
+                    cb.IsChecked = true;
+                cb.Checked += Cb_Checked;
+                cb.Unchecked += Cb_Unchecked;
+                ListBoxItem lbi = new ListBoxItem();
+                lbi.Content = cb;
+                lb_allSource.Items.Add(lbi);
             }
         }
 
-
-
-        private void Model_AuthorizationEvent(object sender, EventArgs e)
+        
+        private void Cb_Unchecked(object sender, RoutedEventArgs e)
         {
-            var args = (EventAuthorizationArgs)e;
+            CheckBox cb = (CheckBox)sender;
+            user.favoritSources.Remove((string)cb.Content);
+            favorites.Delete((string)cb.Content);
+            user.UpdateFavor();
+        }
 
-            throw new NotImplementedException();
+        private void Cb_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+            user.favoritSources.Add((string)cb.Content);
+            favorites.Add((string)cb.Content);
+            user.UpdateFavor();
         }
     }
 }

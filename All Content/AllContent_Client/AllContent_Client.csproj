@@ -61,23 +61,16 @@
     <Compile Include="AuthorizPage.xaml.cs">
       <DependentUpon>AuthorizPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AuthorizWin.xaml.cs">
-      <DependentUpon>AuthorizWin.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ContentUnit.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="DBClient.cs" />
     <Compile Include="EventsArguments.cs" />
     <Compile Include="Favorites.cs" />
-    <Compile Include="Model.cs" />
     <Compile Include="RegistrPage.xaml.cs">
       <DependentUpon>RegistrPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
     <Page Include="AuthorizPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AuthorizWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
