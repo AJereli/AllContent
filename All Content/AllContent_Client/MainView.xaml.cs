@@ -98,5 +98,10 @@ namespace AllContent_Client
             favorites.Add((string)cb.Content);
             user.UpdateFavor();
         }
+
+        private void Grid_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MessageBox.Show("lil");
+        }
     }
 }

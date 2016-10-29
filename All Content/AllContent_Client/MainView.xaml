@@ -15,7 +15,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Margin="3" BorderThickness="1" BorderBrush="#FFE27131" CornerRadius="2" Width="Auto">
-                                    <Grid Margin="2" Width="250" >
+                                    <Grid Margin="2" Width="250" MouseLeftButtonUp="Grid_MouseLeftButtonUp" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition/>
