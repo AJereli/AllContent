@@ -54,7 +54,6 @@ namespace All_Content
         public bool LoadContentToSQL()
         {
            
-            CheckForOF(this);
 
             if (ContainsNote())
                 return false;
@@ -67,6 +66,7 @@ namespace All_Content
            + "VALUES(@header, @description, @imgUrl, @URL, @tags, @source, @date, @time_of_addition)", this);
 
 
+            CheckForOF(this);
 
 
             return true;
@@ -77,14 +77,14 @@ namespace All_Content
 
             curr_news_cnt++;
 
-            if (curr_news_cnt == Row_limit)
+            if (curr_news_cnt >= Row_limit)
                 Archive(cu_this);
         }
 
         private static void Archive(ContentUnit cu_this)
         {
-            cu_this.client.Query("INSERT INTO content_arch (header, description, imgUrl, URL, tags, source, date, time_of_addition)"
-           + "SELECT * FROM content");
+            cu_this.client.Query("INSERT INTO content_arch (id, header, description, imgUrl, URL, tags, source, date, time_of_addition)"
+           + " SELECT * FROM content");
             cu_this.client.Query("DELETE FROM content");
         }
 

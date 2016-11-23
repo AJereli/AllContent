@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
+using System.Collections;
 using MySql.Data.MySqlClient;
 namespace All_Content
 {
@@ -55,10 +56,7 @@ namespace All_Content
             {
                 mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
                 mysqlConn.Open();
-                if (query.Contains("SELECT"))
-                {
-                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
-                }
+               
 
                 MySqlCommand com = new MySqlCommand(@query, mysqlConn);
 
@@ -67,6 +65,45 @@ namespace All_Content
                 dataReader.Close();
             }
         }
+
+        public void Query(string query, MySqlParameters parameters)
+        {
+
+            using (var mysqlConn = new MySqlConnection())
+            {
+                if (query.Contains("SELECT"))
+                {
+                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
+                }
+                lock (threadLock)
+                {
+                    mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+                    mysqlConn.Open();
+                    MySqlCommand com = new MySqlCommand(@query, mysqlConn);
+
+
+                    foreach (var param in parameters)
+                        com.Parameters.Add(param);
+
+
+                    MySqlDataReader dataReader = com.ExecuteReader();
+                    dataReader.Read();
+                    dataReader.Close();
+                }
+            }
+        }
+        /// <summary>
+        /// Same, but only one parameter
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="parameter"></param>
+        public void Query(string query, MySqlParameter parameter)
+        {
+            MySqlParameters parameters = new MySqlParameters();
+            parameters.AddParameter(parameter);
+            Query(query, parameters);
+        }
+
         public void Query(string query, ContentUnit cu)
         {
 
@@ -127,6 +164,29 @@ namespace All_Content
 
             }
 
+        }
+    }
+    class MySqlParameters : IEnumerable
+    {
+        private List<MySqlParameter> parameters { get; }
+        public MySqlParameters()
+        {
+            parameters = new List<MySqlParameter>();
+        }
+
+        public void AddParameter(MySqlParameter param)
+        {
+            parameters.Add(param);
+        }
+
+        public void AddParameter(string param_name, object param_value)
+        {
+            parameters.Add(new MySqlParameter(param_name, param_value));
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return parameters.GetEnumerator();
         }
     }
 }

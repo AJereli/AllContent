@@ -59,21 +59,21 @@ namespace All_Content
             foreach (var site in all_sites)
                 await Task.Run(() =>
             {
-                try
-                {
+               // try
+                
                     lock(pars_lock)
                         site.Pars();
-                }
-                catch (Exception exc)
-                {
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        string name = site.GetType().FullName;
-                        all_info_block.Text += "Исключение при парсинге " + name + " " + DateTime.Now.ToShortTimeString() + "\n";
-                        all_info_block.Text += exc.GetType().FullName + " " + exc.Message + "\n";
-                    }));
+                
+                //catch (ExecutedRoutedEventArgs exc)
+                //{
+                //    Dispatcher.BeginInvoke(new Action(() =>
+                //    {
+                //        string name = site.GetType().FullName;
+                //        all_info_block.Text += "Исключение при парсинге " + name + " " + DateTime.Now.ToShortTimeString() + "\n";
+                //        all_info_block.Text += exc.GetType().FullName + " " + exc.Message + "\n";
+                //    }));
 
-                }
+                //}
             });
 
         }
@@ -123,6 +123,12 @@ namespace All_Content
             all_sites.Add(new LibrebookNews());
             all_sites.Add(new AdMe());
             all_sites.Add(new Starhit());
+
+            string allSitesLink = "";
+            foreach (var site in all_sites)
+                allSitesLink += site.Source + ";";
+            DBClient client = new DBClient();
+            client.Query("UPDATE users SET favorites_source = @allSitesLink WHERE id = 0", new MySql.Data.MySqlClient.MySqlParameter("allSitesLink", allSitesLink));
         }
 
         private void textBox_KeyDown(object sender, KeyEventArgs e)
