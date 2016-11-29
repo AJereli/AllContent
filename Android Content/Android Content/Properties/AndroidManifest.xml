@@ -1,5 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="Android_Content.Android_Content" android:versionCode="1" android:versionName="1.0">
-  <uses-sdk android:minSdkVersion="16" />
-  <application android:label="Android_Content"></application>
+	<uses-sdk android:minSdkVersion="16" />
+  <uses-permission android:name="android.permission.INTERNET"/>
+	<application android:label="Android_Content">
+    
+    <activity android:label="Android_Content" android:name="WebActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <data android:scheme="http"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
+    
+  </application>
 </manifest>
