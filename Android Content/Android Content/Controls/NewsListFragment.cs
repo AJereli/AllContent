@@ -22,6 +22,7 @@ namespace Android_Content
         private uint test_cnt = 40;
         private void TestUnits()
         {
+            
             for (int i = 0; i < test_cnt; ++i)
             {
                 ContentUnit cu = new ContentUnit() { header = "KEK lol #" + i, description = "SNOVA KEK omgwtf plsno", imgUrl = "http://vignette3.wikia.nocookie.net/animeandmangauniverse/images/e/e5/Kallen_Kozuki.jpg/revision/latest?cb=20120129132316.jpg" };
@@ -49,7 +50,9 @@ namespace Android_Content
         public override void OnListItemClick(ListView l, View v, int position, long id)
         {
             ContentUnit cu = ((ContentUnitAdapter)ListAdapter).GetItem(position);
-            StartActivity(new Intent(Intent.ActionView, Android.Net.Uri.Parse(cu.URL)));
+            Intent intent = new Intent(Activity, Java.Lang.Class.FromType(typeof(WebActivity)));
+            intent.SetData(Android.Net.Uri.Parse(cu.URL));
+            StartActivity(intent);
         }
 
     }
