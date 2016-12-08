@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Collections.Generic;
+using System.Collections;
 using MySql.Data.MySqlClient;
-using System.Data;
 namespace All_Content
 {
     
@@ -15,6 +14,8 @@ namespace All_Content
 
         MySqlConnectionStringBuilder mysqlCSB;
         MySqlConnection mysqlConn;
+        private object threadLock = new object();
+        private object threadLockSelect = new object();
 
         public DBClient()
         {
@@ -43,20 +44,6 @@ namespace All_Content
             mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
         }
 
-        /// <summary>
-        /// Open a connection with DB
-        /// </summary>
-        void OpenConnection()
-        {
-            mysqlConn.Open();
-        }
-        /// <summary>
-        /// Close a connection whith DB
-        /// </summary>
-        void CloseConnection()
-        {
-            mysqlConn.Close();
-        }
 
         /// <summary>
         /// Implement INSERT, UPDATE or DELETE query
@@ -65,17 +52,87 @@ namespace All_Content
 
         public void Query(string query)
         {
-            OpenConnection();
-            if (query.Contains("SELECT"))
+            using (var mysqlConn = new MySqlConnection())
             {
-                throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
-            }
+                mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+                mysqlConn.Open();
+               
 
-            MySqlCommand com = new MySqlCommand(query, mysqlConn);
-            MySqlDataReader dataReader = com.ExecuteReader();
-            dataReader.Read();
-            dataReader.Close();
-            CloseConnection();
+                MySqlCommand com = new MySqlCommand(@query, mysqlConn);
+
+                MySqlDataReader dataReader = com.ExecuteReader();
+                dataReader.Read();
+                dataReader.Close();
+            }
+        }
+
+        public void Query(string query, MySqlParameters parameters)
+        {
+
+            using (var mysqlConn = new MySqlConnection())
+            {
+                if (query.Contains("SELECT"))
+                {
+                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
+                }
+                lock (threadLock)
+                {
+                    mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+                    mysqlConn.Open();
+                    MySqlCommand com = new MySqlCommand(@query, mysqlConn);
+
+
+                    foreach (var param in parameters)
+                        com.Parameters.Add(param);
+
+
+                    MySqlDataReader dataReader = com.ExecuteReader();
+                    dataReader.Read();
+                    dataReader.Close();
+                }
+            }
+        }
+        /// <summary>
+        /// Same, but only one parameter
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="parameter"></param>
+        public void Query(string query, MySqlParameter parameter)
+        {
+            MySqlParameters parameters = new MySqlParameters();
+            parameters.AddParameter(parameter);
+            Query(query, parameters);
+        }
+
+        public void Query(string query, ContentUnit cu)
+        {
+
+            using (var mysqlConn = new MySqlConnection())
+            {
+                if (query.Contains("SELECT"))
+                {
+                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED INSERT / UPDATE / DELETE");
+                }
+                lock (threadLock)
+                {
+                    mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+                    mysqlConn.Open();
+                    MySqlCommand com = new MySqlCommand(@query, mysqlConn);
+
+                    com.Parameters.AddWithValue("@header", cu.header);
+                    com.Parameters.AddWithValue("@description", cu.description);
+                    com.Parameters.AddWithValue("@imgUrl", cu.imgUrl);
+                    com.Parameters.AddWithValue("@URL", cu.URL);
+                    com.Parameters.AddWithValue("@tags", cu.tags);
+                    com.Parameters.AddWithValue("@source", cu.source);
+                    com.Parameters.AddWithValue("@date", cu.date);
+                    com.Parameters.AddWithValue("@time_of_addition", cu.time_of_addition.ToShortDateString());
+
+                    MySqlDataReader dataReader = com.ExecuteReader();
+                    dataReader.Read();
+                    dataReader.Close();
+                }
+            }
         }
         /// <summary>
         /// Select information from DB
@@ -84,21 +141,52 @@ namespace All_Content
         /// <returns>list of selected information</returns>
         public List<string> SelectQuery(string query)
         {
-            OpenConnection();
-            if (query.Contains("INSERT"))
+            using (var mysqlConn = new MySqlConnection())
             {
-                throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
-            }
-            List<string> result = new List<string>();
-            MySqlCommand command = new MySqlCommand(query, mysqlConn);
-            MySqlDataReader dataReader = command.ExecuteReader();
-            while (dataReader.Read())
-                result.Add(dataReader.GetString(0));
 
-            dataReader.Close();
-            CloseConnection();
-            return result;
+                mysqlConn.ConnectionString = mysqlCSB.ConnectionString;
+                mysqlConn.Open();
+                if (query.Contains("INSERT INTO"))
+                {
+                    throw new Exception("WRONG TYPE OF SQL QUERY, NEED SELECT");
+                }
+                List<string> result = new List<string>();
+
+                MySqlCommand command = new MySqlCommand(@query, mysqlConn);
+                MySqlDataReader dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                    result.Add(dataReader.GetString(0));
+
+                dataReader.Close();
+
+
+                return result;
+
+            }
+
+        }
+    }
+    class MySqlParameters : IEnumerable
+    {
+        private List<MySqlParameter> parameters { get; }
+        public MySqlParameters()
+        {
+            parameters = new List<MySqlParameter>();
         }
 
+        public void AddParameter(MySqlParameter param)
+        {
+            parameters.Add(param);
+        }
+
+        public void AddParameter(string param_name, object param_value)
+        {
+            parameters.Add(new MySqlParameter(param_name, param_value));
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return parameters.GetEnumerator();
+        }
     }
 }

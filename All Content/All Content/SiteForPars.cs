@@ -16,7 +16,8 @@ namespace All_Content
         protected IConfiguration config { get; set; }
         protected IDocument document { get; set; }
         protected ContentUnit cu { get; set; }
-        
+
+        public string Source;
         protected SiteForPars(string _link)
         {
             link = _link;
@@ -24,7 +25,14 @@ namespace All_Content
             parser = new HtmlParser();
             config = Configuration.Default.WithDefaultLoader();
             document = BrowsingContext.New(config).OpenAsync(link).Result;
+            Source = link;
             cu.source = link;
         }
+        protected void LoadDocument()
+        {
+            document.Dispose();
+            document = BrowsingContext.New(config).OpenAsync(link).Result;
+        }
+        public virtual void Pars() { }
     }
 }

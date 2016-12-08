@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AngleSharp">
-      <HintPath>..\..\..\..\..\..\..\AngleSharp-master\src\AngleSharp\bin\Debug\v4.5\AngleSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AngleSharp\src\packages\AngleSharp.0.9.6\lib\dotnet\AngleSharp.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\..\..\..\Downloads\v4.5\MySql.Data.dll</HintPath>
@@ -60,21 +60,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdMe.cs" />
     <Compile Include="ContentUnit.cs" />
-    <Compile Include="IPageParsed.cs" />
+    <Compile Include="DiletantMedia.cs" />
     <Compile Include="Kanobu.cs" />
+    <Compile Include="KinoPoisk.cs" />
     <Compile Include="LentaRu.cs" />
-    <Compile Include="LifehackerAllTop.cs" />
-    <Compile Include="LifehackerHealth.cs" />
-    <Compile Include="LifehackerInfographics.cs" />
-    <Compile Include="LifehackerLife.cs" />
-    <Compile Include="LifehackerRelax.cs" />
-    <Compile Include="LifehackerReview.cs" />
-    <Compile Include="LifehackerSport.cs" />
-    <Compile Include="LifehackerTechnology.cs" />
-    <Compile Include="LifehackerWork.cs" />
+    <Compile Include="LibrebookNews.cs" />
+    <Compile Include="LifeHacker.cs" />
+    <Compile Include="NplusOne.cs" />
     <Compile Include="RiaNews.cs" />
+    <Compile Include="RoemInvesticii.cs" />
+    <Compile Include="RoemMedia.cs" />
     <Compile Include="SiteForPars.cs" />
+    <Compile Include="Starhit.cs" />
     <Compile Include="TheVillagePars.cs" />
     <Compile Include="TJpars.cs" />
     <Page Include="MainWindow.xaml">
@@ -93,7 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MD5Hashing.cs" />
-    <Compile Include="NplusOne_Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

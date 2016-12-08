@@ -12,13 +12,15 @@ namespace All_Content
 {
     class TheVillagePars : SiteForPars
     {
-        
 
-        public TheVillagePars() : base ("http://www.the-village.ru/")
+
+        public TheVillagePars() : base("http://www.the-village.ru/")
         {
-            
+        }
 
-         
+        public override void Pars()
+        {
+            IDocument document = BrowsingContext.New(config).OpenAsync(link).Result;
             var all_news = document.All.Where(m => m.Id == "widget_news_block").First().QuerySelectorAll("div.post-item.post-item-news a");
 
             foreach (IElement element in all_news)
@@ -31,6 +33,7 @@ namespace All_Content
                 cu.tags = "TheVillage";
                 cu.LoadContentToSQL();
             }
+
         }
     }
 }
