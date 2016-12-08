@@ -20,6 +20,7 @@ namespace Android_Content.Views
         {
             base.OnCreate(bundle);
 
+            //// Set our view from the "main" layout resource
             SetContentView(Resource.Layout.MainLayout);
             Android.Support.V4.App.FragmentManager fm = SupportFragmentManager;
             Android.Support.V4.App.Fragment fragment = fm.FindFragmentById(Resource.Id.fragmentContainer);
